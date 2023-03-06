@@ -17,7 +17,7 @@
 
                     <div class="px-3">
                         <div class="title column py-3">
-                            <input id="title" name="title" value=${boardDetail.title}
+                            <input id="title" name="title" value="${boardDetail.title}"
                                 class="title form-control my-border-color-default" type="text"
                                 placeholder="제목을 입력해주세요.">
                         </div>
