@@ -44,11 +44,10 @@ public class EmployeeRepositoryTest {
       @Test
       public void findRecommendWithResume_test() {
             // given
-            int id = 6;
+            int id = 1;
             // when
-            List<EmployeeAndResumeRespDto> employeeAndResumeRespDto = employeeRepository.findRecommendWithResume(id);
+            EmployeeAndResumeRespDto employeeAndResumeRespDto = employeeRepository.findRecommendWithResume(id);
             // then
-            assertThat(employeeAndResumeRespDto.get(0).getRealName()).isNotEqualTo("김살");
-            assertThat(employeeAndResumeRespDto.get(1).getRealName()).isNotEqualTo("박사랑");
+            assertThat(employeeAndResumeRespDto.getRealName()).isEqualTo("김살");
       }
 }
