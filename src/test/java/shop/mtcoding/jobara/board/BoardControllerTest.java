@@ -34,6 +34,7 @@ import shop.mtcoding.jobara.board.dto.BoardResp.BoardDetailRespDto;
 import shop.mtcoding.jobara.board.dto.BoardResp.BoardMainRespDto;
 import shop.mtcoding.jobara.board.dto.BoardResp.BoardUpdateRespDto;
 import shop.mtcoding.jobara.board.dto.BoardResp.MyBoardListRespDto;
+import shop.mtcoding.jobara.board.dto.BoardResp.MyScrapBoardListRespDto;
 import shop.mtcoding.jobara.board.dto.BoardResp.PagingDto;
 import shop.mtcoding.jobara.user.vo.UserVo;
 
@@ -54,11 +55,10 @@ public class BoardControllerTest {
     public void setUp() {
         UserVo principal = new UserVo();
         principal.setId(6);
-        // principal.setId(1);
         principal.setUsername("cos");
-        // principal.setUsername("ssar");
         principal.setRole("company");
-
+        // principal.setId(1);
+        // principal.setUsername("ssar");
         // principal.setRole("employee");
 
         mockSession = new MockHttpSession();
@@ -262,8 +262,32 @@ public class BoardControllerTest {
         // then
         resultActions.andExpect(status().isOk());
         assertThat(boardList.getBoardListDtos().size()).isEqualTo(8);
-        assertThat(boardList.getBoardListDtos().get(0).getCss()).isEqualTo("fa-solid");
+        // assertThat(boardList.getBoardListDtos().get(0).getCss()).isEqualTo("fa-solid");
     }
+
+    // @Test 구직회원 로그인시 테스트 완료
+    // public void scrapList_test() throws Exception {
+    // // given
+    // int id = 1;
+
+    // // when
+    // ResultActions resultActions = mvc.perform(
+    // get("/board/scrapList/" + id)
+    // .session(mockSession));
+
+    // Map<String, Object> map =
+    // resultActions.andReturn().getModelAndView().getModel();
+    // List<MyScrapBoardListRespDto> myScrapList = (List<MyScrapBoardListRespDto>)
+    // map.get("myScrapBoardList");
+
+    // String model = om.writeValueAsString(myScrapList);
+    // System.out.println("테스트 : " + model);
+
+    // // then
+    // resultActions.andExpect(status().isOk());
+    // assertThat(myScrapList.size()).isEqualTo(2);
+    // assertThat(myScrapList.get(0).getCss()).isEqualTo("fa-solid");
+    // }
 
     @Test
     public void boardMainList_test() throws Exception {

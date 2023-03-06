@@ -60,6 +60,15 @@ insert into employeetech_tb(user_id, skill) values(1, 5);
 insert into employeetech_tb(user_id, skill) values(2, 2);
 insert into employeetech_tb(user_id, skill) values(2, 4);
 insert into employeetech_tb(user_id, skill) values(2, 7);
+insert into employeetech_tb(user_id, skill) values(3, 1);
+insert into employeetech_tb(user_id, skill) values(3, 3);
+insert into employeetech_tb(user_id, skill) values(3, 6);
+insert into employeetech_tb(user_id, skill) values(4, 7);
+insert into employeetech_tb(user_id, skill) values(4, 8);
+insert into employeetech_tb(user_id, skill) values(4, 6);
+insert into employeetech_tb(user_id, skill) values(4, 5);
+insert into employeetech_tb(user_id, skill) values(4, 1);
+insert into employeetech_tb(user_id, skill) values(5, 2);
 
 insert into boardtech_tb(board_id, skill) values(1, 2);
 insert into boardtech_tb(board_id, skill) values(1, 3);
@@ -78,7 +87,7 @@ insert into boardtech_tb(board_id, skill) values(11, 3);
 insert into boardtech_tb(board_id, skill) values(12, 1);
 insert into boardtech_tb(board_id, skill) values(13, 3);
 insert into boardtech_tb(board_id, skill) values(14, 1);
-insert into boardtech_tb(board_id, skill) values(15, 2);
+insert into boardtech_tb(board_id, skill) values(15, 3);
 insert into boardtech_tb(board_id, skill) values(16, 1);
 insert into boardtech_tb(board_id, skill) values(17, 1);
 
