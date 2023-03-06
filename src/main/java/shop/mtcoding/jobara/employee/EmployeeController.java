@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import shop.mtcoding.jobara.board.dto.BoardResp.PagingDto;
 import shop.mtcoding.jobara.common.dto.ResponseDto;
+import shop.mtcoding.jobara.common.ex.CustomException;
 import shop.mtcoding.jobara.common.util.Verify;
 import shop.mtcoding.jobara.employee.dto.EmployeeReq.EmployeeJoinReqDto;
 import shop.mtcoding.jobara.employee.dto.EmployeeReq.EmployeeTechUpdateReqDto;
@@ -49,9 +50,9 @@ public class EmployeeController {
     public String employeeList(Model model, Integer page) {
         UserVo principal = (UserVo) session.getAttribute("principal");
         PagingDto pagingPS = employeeService.getEmployee(page);
-
         model.addAttribute("pagingDto", pagingPS);
         model.addAttribute("principal", principal);
+        System.out.println("테스트 : " + pagingPS.getResumeListDtos().get(0).getProfile());
         if (principal != null) {
             if (principal.getRole().equals("company")) {
                 List<EmployeeAndResumeRespDto> recommendEmployeeListPS = employeeService
@@ -107,6 +108,13 @@ public class EmployeeController {
         Verify.validateString(employeeUpdateReqDto.getTel(), "전화번호를 입력하세요.");
         Verify.validateObject(employeeUpdateReqDto.getCareer(), "경력을 입력하세요.");
         Verify.validateString(employeeUpdateReqDto.getEducation(), "학력을 입력하세요.");
+
+        if (profile.isEmpty()) {
+            throw new CustomException("사진이 전송되지 않았습니다");
+        }
+        if (!profile.getContentType().startsWith("image")) {
+            throw new CustomException("사진 파일만 업로드 할 수 있습니다.");
+        }
 
         UserVo UserVoPS = employeeService.updateEmpolyee(employeeUpdateReqDto, principal.getId(), profile);
         session.removeAttribute("principal");

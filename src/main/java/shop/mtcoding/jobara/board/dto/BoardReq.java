@@ -21,6 +21,7 @@ public class BoardReq {
         private String educationString;
         private Integer jobType;
         private String jobTypeString;
+        private String deadline;
 
         private String favor;
         private Integer userId;
@@ -40,6 +41,7 @@ public class BoardReq {
         private String educationString;
         private Integer jobType;
         private String jobTypeString;
+        private String deadline;
 
         private String favor;
         private Integer userId;
