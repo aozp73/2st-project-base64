@@ -5,9 +5,11 @@
 <div style="height: 100px;"></div>
 
        
-        <div class="container my-3 py-3 px-3">
+            <div class="container py-3 bg-white">
             <div class="p-3">
+            <hr>
                 <h2 style="text-align: center;">채용 공고 목록</h2>
+                <hr>
             </div>
             <c:if test="${principal.role == 'employee'}">
                 <div class="d-flex justify-content-end mb-2">

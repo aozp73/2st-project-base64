@@ -20,7 +20,6 @@ import shop.mtcoding.jobara.board.dto.BoardResp.PagingDto;
 import shop.mtcoding.jobara.common.dto.ResponseDto;
 import shop.mtcoding.jobara.common.util.Verify;
 import shop.mtcoding.jobara.employee.dto.EmployeeReq.EmployeeJoinReqDto;
-import shop.mtcoding.jobara.employee.dto.EmployeeReq.EmployeeLoginReqDto;
 import shop.mtcoding.jobara.employee.dto.EmployeeReq.EmployeeTechUpdateReqDto;
 import shop.mtcoding.jobara.employee.dto.EmployeeReq.EmployeeUpdateReqDto;
 import shop.mtcoding.jobara.employee.dto.EmployeeResp.EmployeeAndResumeRespDto;
@@ -94,15 +93,6 @@ public class EmployeeController {
         Verify.validateString(employeeJoinReqDto.getEmail(), "이메일을 입력하세요.");
         employeeService.insertEmployee(employeeJoinReqDto);
         return "redirect:/loginForm";
-    }
-
-    @PostMapping("/employee/login")
-    public String join(EmployeeLoginReqDto employeeLoginReqDto) {
-        Verify.validateString(employeeLoginReqDto.getUsername(), "유저네임을 입력하세요.");
-        Verify.validateString(employeeLoginReqDto.getPassword(), "암호를 입력하세요.");
-        UserVo userVoPS = employeeService.getEmployee(employeeLoginReqDto);
-        session.setAttribute("principal", userVoPS);
-        return "redirect:/";
     }
 
     @PostMapping("/employee/update/{id}")

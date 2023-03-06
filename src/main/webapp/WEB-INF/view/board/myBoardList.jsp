@@ -2,9 +2,11 @@
 
     <%@ include file="../layout/header.jsp" %>
 <div style="height: 100px;"></div>
-        <div class="container my-3 py-3 px-3">
+            <div class="container py-3 bg-white">
             <div class="p-3">
+                <hr>
                 <h2 style="text-align: center;">나의 공고 목록</h2>
+                <hr>
             </div>
 
             <!-- 카드 시작 -->

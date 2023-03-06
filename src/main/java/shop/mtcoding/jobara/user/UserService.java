@@ -20,13 +20,8 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserVo getUser(UserLoginReqDto userLoginReqDto) {
-        String hashPassword;
-        try {
-            String salt = userRepository.findByUsername(userLoginReqDto.getUsername()).getSalt();
-            hashPassword = Hash.encode(userLoginReqDto.getPassword()+ salt);
-        } catch (Exception e) {
-            throw new CustomException("서버 오류 : 복호화 실패", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        String salt = userRepository.findByUsername(userLoginReqDto.getUsername()).getSalt();
+        String hashPassword = Hash.encode(userLoginReqDto.getPassword() + salt);
         UserVo userVoPS = userRepository.findByUsernameAndPassword(
                 new User(userLoginReqDto.getUsername(), hashPassword));
         Verify.validateObject(userVoPS, "유저네임이나 암호를 확인해주세요.");

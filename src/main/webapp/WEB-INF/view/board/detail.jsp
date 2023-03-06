@@ -2,8 +2,8 @@
 
     <%@ include file="../layout/header.jsp" %>
         <div style="height: 100px;"></div>
-        <div class="container my-3 py-3 px-3">
-            <div class="my-border-color-default">
+            <div class="container py-3 bg-white">
+            <div class="border border-primary">
                 <div class="my-boardDetail-header">
                     <div class="row">
                         <div class="col-md-6 mb-2">

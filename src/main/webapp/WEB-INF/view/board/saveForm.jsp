@@ -5,11 +5,13 @@
 
         <form action="/board/save" method="post">
 
-            <div class="container py-3 px-3">
+            <div class="container py-3 bg-white">
                 <div class="justify-content-center d-flex my-3 py-3">
+                <hr>
                     <h2>
                         기업 공고 등록
                     </h2>
+                <hr>
                 </div>
 
                 <div class="my-border-color-default px-3 py-3" style="width: 100%; ">
