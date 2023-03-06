@@ -115,7 +115,8 @@ public class BoardController {
         BoardUpdateRespDto boardDetailPS = boardService.getDetailForUpdate(id, principal.getId());
         model.addAttribute("boardDetail", boardDetailPS);
         model.addAttribute("boardSkill", boardSkill);
-        System.out.println("테스트 : " + boardDetailPS.getDeadline());
+
+        System.out.println("테스트 : " + boardDetailPS.getTitle());
         return "board/updateForm";
     }
 
@@ -134,6 +135,10 @@ public class BoardController {
         ArrayList<Object> resDateParse = DateParse.Dday(boardUpdateReqDto.getDeadline());
         if (!(0 < (Integer) resDateParse.get(0) && (Integer) resDateParse.get(0) < 100)) {
             throw new CustomApiException("1일~100일 내의 마감날짜를 선택 해주세요. (~" + (String) resDateParse.get(1) + ")");
+        }
+
+        if (boardUpdateReqDto.getFavor().length() > 16) {
+            throw new CustomApiException("우대사항은 16자 이내 입력 가능합니다");
         }
 
         Verify.isEqualApi(boardUpdateReqDto.getCheckedValues().size(), 0, "선호기술을 한 가지 이상 선택해주세요.",
@@ -164,6 +169,10 @@ public class BoardController {
         // 유효성
         Verify.validateString(boardInsertReqDto.getTitle(), "제목을 입력하세요");
         Verify.validateString(boardInsertReqDto.getContent(), "내용을 입력하세요");
+        System.out.println("테스트 : " + boardInsertReqDto.getFavor().length());
+        if (boardInsertReqDto.getFavor().length() > 16) {
+            throw new CustomException("우대사항은 16자 이내 입력 가능합니다");
+        }
 
         Verify.isStringEquals(boardInsertReqDto.getCareerString(), "경력선택", "경력을 선택하세요", HttpStatus.BAD_REQUEST);
         Verify.isStringEquals(boardInsertReqDto.getCareerString(), "학력선택", "학력을 선택하세요", HttpStatus.BAD_REQUEST);
