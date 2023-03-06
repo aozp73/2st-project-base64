@@ -104,10 +104,9 @@ public class EmployeeService {
             MultipartFile profile) {
         String uuidImageName = PathUtil.writeImageFile(profile);
 
-        User user = new User(principalId, employeeUpdateReqDto.getPassword(), employeeUpdateReqDto.getEmail(),
-                employeeUpdateReqDto.getAddress(), employeeUpdateReqDto.getDetailAddress(),
-                employeeUpdateReqDto.getTel(),
-                uuidImageName);
+        String salt = Hash.makeSalt();
+        String hashPassword = Hash.encode(employeeUpdateReqDto.getPassword() + salt);
+        User user = new User(employeeUpdateReqDto, principalId, uuidImageName, hashPassword, salt);
         Employee employee = new Employee(principalId, employeeUpdateReqDto.getRealName(),
                 employeeUpdateReqDto.getCareer(),
                 employeeUpdateReqDto.getEducation());
