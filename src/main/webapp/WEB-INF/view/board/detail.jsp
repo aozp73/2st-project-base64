@@ -5,6 +5,7 @@
         <div class="container my-3 py-3 px-3">
             <div class="my-border-color-default">
                 <div class="my-boardDetail-header">
+
                     <div class="row">
                         <div class="col-md-6 mb-2">
                             <div class="my-4 ms-4 pt-1 ps-2">
@@ -12,9 +13,11 @@
                                     <div class="my-text-ellipsis">
                                         ${board.companyName}
                                     </div>
-                                    <div class="ms-2"><i id="heart"
-                                            class="fa-regular fa-heart my-xl my-cursor fa-sm"></i>
-                                    </div>
+    <div class="ms-3">
+        <c:if test="${principal != null and principal.role eq 'employee'}" >
+            <i id="heart-${board.id}" class="fa-regular fa-heart my-xl my-cursor fa-sm ${love.css}" value="${love.id}" onclick="heart(`${board.id}`)"></i>
+        </c:if>
+    </div>
                                 </div>
                                 <div class="my-text-ellipsis" style="font-size: 22px;">
                                     ${board.title}
@@ -52,10 +55,80 @@
                                     </div>
                                 </div>
                             </div>
+
+
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6" style="position: relative; top:105px">
+                            <div class="ms-2">
+                                <div class="mb-1"></div>
+                                <div class="mb-3">
+                                    관심분야
+                                </div>
+
+                                <div class="mb-2">
+                                    <div class="form-check form-check-inline" style="width: 19%">
+                                        <input class="form-check-input" type="checkbox" id="lang1" value="1"
+                                            name="lang" onClick="return false">
+                                        <label class="form-check-label" for="inlineCheckbox1">Java</label>
+                                    </div>
+                                    <div class="form-check form-check-inline" style="width: 19%">
+                                        <input class="form-check-input" type="checkbox" id="lang2" value="2"
+                                            name="lang" onClick="return false">
+                                        <label class="form-check-label" for="inlineCheckbox2">C#</label>
+                                    </div>
+                                    <div class="form-check form-check-inline" style="width: 19%">
+                                        <input class="form-check-input" type="checkbox" id="lang3" value="3"
+                                            name="lang" onClick="return false">
+                                        <label class="form-check-label" for="inlineCheckbox1">Python</label>
+                                    </div>
+                                    <div class="form-check form-check-inline" style="width: 19%">
+                                        <input class="form-check-input" type="checkbox" id="lang4" value="4"
+                                            name="lang" onClick="return false">
+                                        <label class="form-check-label" for="inlineCheckbox2">PHP</label>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="form-check form-check-inline" style="width: 19%">
+                                        <input class="form-check-input" type="checkbox" id="lang5" value="5"
+                                            name="lang" onClick="return false">
+                                        <label class="form-check-label" for="inlineCheckbox1">JS</label>
+                                    </div>
+                                    <div class="form-check form-check-inline" style="width: 19%">
+                                        <input class="form-check-input" type="checkbox" id="lang6" value="6"
+                                            name="lang" onClick="return false">
+                                        <label class="form-check-label" for="inlineCheckbox2">Ruby</label>
+                                    </div>
+                                    <div class="form-check form-check-inline" style="width: 19%">
+                                        <input class="form-check-input" type="checkbox" id="lang7" value="7"
+                                            name="lang" onClick="return false">
+                                        <label class="form-check-label" for="inlineCheckbox1">Assembly</label>
+                                    </div>
+                                    <div class="form-check form-check-inline" style="width: 19%">
+                                        <input class="form-check-input" type="checkbox" id="lang8" value="8"
+                                            name="lang" onClick="return false">
+                                        <label class="form-check-label" for="inlineCheckbox2">SQL</label>
+                                    </div>
+                                </div>
+
+
+                                <div>
+                                </div>
+
+
+                            </div>
                         </div>
+
+
+
+
+
+
+
+
                     </div>
+
+
                     <div class="pt-3 ps-1 my-borderDetail-color-left">
                         <div class="row d-flex justify-content-center mb-3 mt-3 pt-2"
                             style="height: 80px; flex: 1 1 auto;">
@@ -94,11 +167,11 @@
                             <br>
                         </div>
                     </div>
-                    <c:if test="${principal.role eq 'employee'}" >
-                    <div class="d-flex justify-content-center mt-5">
-                        <div><button type="submit" class="btn btn-primary my-button-color-default"
-                                data-bs-toggle="modal" data-bs-target="#portfolioModal1">지원하기</button></div>
-                    </div>
+                    <c:if test="${principal.role eq 'employee'}">
+                        <div class="d-flex justify-content-center mt-5">
+                            <div><button type="submit" class="btn btn-primary my-button-color-default"
+                                    data-bs-toggle="modal" data-bs-target="#portfolioModal1">지원하기</button></div>
+                        </div>
                     </c:if>
                 </div>
             </div>
@@ -138,14 +211,14 @@
                                             <tbody>
                                                 <!-- 반복문 -->
                                                 <c:forEach items="${resumeList}" var="resume" varStatus="status">
-                                                <tr>
-                                                    <td class="text-center">${status.count}</td>
-                                                    <td class="my-text-ellipsis">${resume.title}</td>
-                                                    <td><button type="button"
-                                                            class="badge bg-success my-border-color-default"
-                                                            onclick="apply(${board.id}, ${resume.id})">지원</span>
-                                                    </td>
-                                                </tr>
+                                                    <tr>
+                                                        <td class="text-center">${status.count}</td>
+                                                        <td class="my-text-ellipsis">${resume.title}</td>
+                                                        <td><button type="button"
+                                                                class="badge bg-success my-border-color-default"
+                                                                onclick="apply(${board.id}, ${resume.id})">지원</span>
+                                                        </td>
+                                                    </tr>
                                                 </c:forEach>
                                             </tbody>
                                         </table>
@@ -161,11 +234,64 @@
                 </div>
             </div>
         </div>
+
+
+
         <script>
+
+            function heart(boardId){
+
+                let targetHeart = "heart-"+boardId;
+                let heartId= $("#"+targetHeart).attr("value");   
+                let board = { boardId : boardId }
+
+                // 특정유저가 특정게시물에 좋아요를 안 한 상태라면
+                // DB, delete에서 heart input value에 0을 저장한 상태임
+                if (heartId == 0) {
+
+                    $.ajax({
+                        type: "post",
+                        url: "/love",
+                        data: JSON.stringify(board),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json"
+                    }).done((res) => {
+                        $("#"+targetHeart).addClass("fa-solid");
+                        $("#"+targetHeart).removeClass("fa-regular");
+                        $("#"+targetHeart).attr("value", res.data);
+                    }).fail((err)=>{
+                        alert(err.responseJSON.msg);
+                    });
+
+                } else {
+
+                    $.ajax({
+                        type: "delete",
+                        url: "/love/"+heartId,
+                        dataType: "json"
+                    }).done((res) => {
+                        $("#"+targetHeart).removeClass("fa-solid");
+                        $("#"+targetHeart).addClass("fa-regular");
+                        $("#"+targetHeart).attr("value", res.data);
+                    }).fail((err)=>{
+                        alert(err.responseJSON.msg);
+                    });
+
+                }
+            }
+            
+          
+            var boardSkillArr = ${ boardSkill };
+            boardSkillArr.forEach(num => {
+                var lang = num
+                var id = "lang" + num
+                $("#" + id).attr("checked", true);
+            });
+
             function apply(boardId, resumeId) {
                 let data = {
-                    boardId : boardId,
-                    resumeId : resumeId,
+                    boardId: boardId,
+                    resumeId: resumeId,
                 }
                 $.ajax({
                     type: "post",
@@ -179,5 +305,6 @@
                     alert(err.responseJSON.msg);
                 });
             }
+
         </script>
         <%@ include file="../layout/footer.jsp" %>
