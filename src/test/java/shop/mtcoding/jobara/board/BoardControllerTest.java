@@ -51,12 +51,13 @@ public class BoardControllerTest {
     @BeforeEach
     public void setUp() {
         UserVo principal = new UserVo();
-        principal.setId(6);
-        // principal.setId(1);
-        principal.setUsername("cos");
-        principal.setRole("company");
+        // principal.setId(6);
+        principal.setId(1);
+        // principal.setUsername("cos");
+        principal.setUsername("ssar");
+        // principal.setRole("company");
 
-        // principal.setRole("employee");
+        principal.setRole("employee");
 
         mockSession = new MockHttpSession();
         mockSession.setAttribute("principal", principal);
@@ -214,18 +215,27 @@ public class BoardControllerTest {
 
         // when
         ResultActions resultActions = mvc.perform(
+                // get("/board/" + id).session(mockSession)); // 구직회원으로 로그인하여 session 저장 시 좋아요
+                // 정보 확인 완료
                 get("/board/" + id));
 
         Map<String, Object> map = resultActions.andReturn().getModelAndView().getModel();
         BoardDetailRespDto board = (BoardDetailRespDto) map.get("board");
+        // LoveDetailRespDto love = (LoveDetailRespDto) map.get("love");
 
-        // String model = om.writeValueAsString(board);
-        // System.out.println("테스트 : " + model);
+        // String boardModel = om.writeValueAsString(board);
+        // System.out.println("테스트 : " + boardModel);
+
+        // String loveModel = om.writeValueAsString(love);
+        // System.out.println("테스트 : " + loveModel);
+        // System.out.println("테스트 : " + love.getId());
 
         // then
         resultActions.andExpect(status().isOk());
         assertThat(board.getCompanyScale()).isEqualTo("대기업");
         assertThat(board.getCompanyField()).isEqualTo("IT업");
+        // assertThat(love.getId()).isEqualTo(1);
+        // assertThat(love.getCss()).isEqualTo("fa-solid");
     }
 
     @Test
@@ -234,7 +244,7 @@ public class BoardControllerTest {
         // String keyword = "lang";
         // Integer page = 1; userId=1, role="employee" 의 세션 (ssar 로그인) 일 때 테스트 완료
         String keyword = null;
-        Integer page = 2;
+        Integer page = 0;
 
         // when
         ResultActions resultActions = mvc.perform(
@@ -244,12 +254,13 @@ public class BoardControllerTest {
         Map<String, Object> map = resultActions.andReturn().getModelAndView().getModel();
         PagingDto boardList = (PagingDto) map.get("pagingDto");
 
-        // String model = om.writeValueAsString(boardList.getBoardListDtos());
-        // System.out.println("테스트 : " + model);
+        String model = om.writeValueAsString(boardList.getBoardListDtos());
+        System.out.println("테스트 : " + model);
 
         // then
-        // resultActions.andExpect(status().isOk());
-        assertThat(boardList.getBoardListDtos().size()).isEqualTo(1);
+        resultActions.andExpect(status().isOk());
+        assertThat(boardList.getBoardListDtos().size()).isEqualTo(8);
+        assertThat(boardList.getBoardListDtos().get(0).getCss()).isEqualTo("fa-solid");
     }
 
     @Test
