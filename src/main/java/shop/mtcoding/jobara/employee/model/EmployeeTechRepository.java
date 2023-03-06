@@ -13,6 +13,8 @@ public interface EmployeeTechRepository {
 
     public List<Integer> findByIdWithSkillForDetail(int userId);
 
+    public List<String> findByIdWithSkillNameForDetail(int userId);
+
     public EmployeeTech findByUserId(int userId);
 
     public int insert(EmployeeTech employeeTech);

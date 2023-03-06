@@ -149,4 +149,9 @@ public class EmployeeService {
         List<Integer> employeeTechPS = employeeTechRepository.findByIdWithSkillForDetail(id);
         return employeeTechPS;
     }
+
+    public List<String> getEmployeeTech(Integer id) {
+        List<String> employeeTechPS = employeeTechRepository.findByIdWithSkillNameForDetail(id);
+        return employeeTechPS;
+    }
 }
