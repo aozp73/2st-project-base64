@@ -87,7 +87,7 @@ public class ResumeController {
         if (!principal.getRole().equals("employee")) {
             throw new CustomException("권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
-        if (resumeSaveReq.getTitle() == null) {
+        if (resumeSaveReq.getTitle().isEmpty()) {
             resumeSaveReq.setTitle("무제");
         }
         resumeService.saveResume(principal.getId(), resumeSaveReq);

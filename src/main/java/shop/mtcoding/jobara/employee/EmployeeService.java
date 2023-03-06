@@ -53,8 +53,16 @@ public class EmployeeService {
     }
 
     public List<EmployeeAndResumeRespDto> getRecommendEmployee(int id) {
-        List<EmployeeAndResumeRespDto> employeePS = employeeRepository.findRecommendWithResume(id);
-        return employeePS;
+        List<Integer> recommendId = employeeRepository.findRecommendId(id);
+        List<EmployeeAndResumeRespDto> employeeListPS = new ArrayList<>();
+        for (int i = 0; i < recommendId.size(); i++) {
+            EmployeeAndResumeRespDto employeePS = employeeRepository.findRecommendWithResume(recommendId.get(i));
+            employeeListPS.add(employeePS);
+        }
+        if (employeeListPS.size() > 4) {
+            return employeeListPS.subList(0, 4);
+        }
+        return employeeListPS;
     }
 
     public EmployeeAndResumeRespDto getEmployee(int id) {

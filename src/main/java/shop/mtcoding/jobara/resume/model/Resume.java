@@ -18,7 +18,11 @@ public class Resume {
     private Timestamp createdAt;
 
     public String getPreview() {
-        return content.substring(0, 10);
+        if (content.length() > 20) {
+            return content.substring(0, 20) + "...";
+        } else {
+            return content;
+        }
     }
 
     public Resume(Integer userId, String title, String content) {

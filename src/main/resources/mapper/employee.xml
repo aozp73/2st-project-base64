@@ -43,12 +43,16 @@
         from user_tb, employee_tb, resume_tb
         where user_tb.id = employee_tb.user_id
         and employee_tb.user_id = resume_tb.user_id
-        and user_tb.id in
-        (select distinct user_id from employeetech_tb
+        and user_tb.id in (#{id})
+        order by created_at limit 1
+    </select>
+    
+    <select id="findRecommendId" resultType="Integer">
+        select distinct user_id from employeetech_tb
         where skill = any(select skill from boardtech_tb
         where board_id = (select id from board_tb
         where user_id = #{id}
-        order by created_at limit 1)))
+        order by created_at limit 1))
     </select>
 
     <select id="findByUserId" resultType="shop.mtcoding.jobara.employee.model.Employee">

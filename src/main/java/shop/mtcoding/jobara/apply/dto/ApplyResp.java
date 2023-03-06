@@ -34,6 +34,14 @@ public class ApplyResp {
                     return "검토중";
             }
         }
+
+        public String getPreview() {
+            if (title.length() > 20) {
+                return title.substring(0, 20) + "...";
+            } else {
+                return title;
+            }
+        }
     }
 
     @Getter
@@ -60,6 +68,22 @@ public class ApplyResp {
                     return "불합격";
                 default:
                     return "검토중";
+            }
+        }
+
+        public String getBoardPreview() {
+            if (boardTitle.length() > 20) {
+                return boardTitle.substring(0, 20) + "...";
+            } else {
+                return boardTitle;
+            }
+        }
+
+        public String getResumePreview() {
+            if (resumeTitle.length() > 20) {
+                return resumeTitle.substring(0, 20) + "...";
+            } else {
+                return resumeTitle;
             }
         }
     }
