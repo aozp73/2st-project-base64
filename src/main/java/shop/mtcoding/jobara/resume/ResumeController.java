@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import shop.mtcoding.jobara.common.dto.ResponseDto;
+import shop.mtcoding.jobara.common.ex.CustomException;
 import shop.mtcoding.jobara.common.util.Verify;
 import shop.mtcoding.jobara.resume.dto.ResumeReq.ResumeSaveReq;
 import shop.mtcoding.jobara.resume.dto.ResumeReq.ResumeUpdateReq;
@@ -36,7 +37,7 @@ public class ResumeController {
         UserVo principal = (UserVo) session.getAttribute("principal");
         Verify.validateApiObject(principal, "로그인이 필요합니다.");
         Verify.checkRoleApi(principal, "employee");
-        if (resumeUpdateReq.getTitle() == null) {
+        if (resumeUpdateReq.getTitle().isEmpty() || resumeUpdateReq.getTitle().isBlank()) {
             resumeUpdateReq.setTitle("무제");
         }
         resumeService.updateResume(principal.getId(), resumeUpdateReq);
