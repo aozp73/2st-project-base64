@@ -16,6 +16,7 @@ import shop.mtcoding.jobara.board.dto.BoardResp.BoardListRespDto;
 import shop.mtcoding.jobara.board.dto.BoardResp.BoardMainRespDto;
 import shop.mtcoding.jobara.board.dto.BoardResp.BoardUpdateRespDto;
 import shop.mtcoding.jobara.board.dto.BoardResp.MyBoardListRespDto;
+import shop.mtcoding.jobara.board.dto.BoardResp.MyScrapBoardListRespDto;
 import shop.mtcoding.jobara.board.dto.BoardResp.PagingDto;
 import shop.mtcoding.jobara.board.model.Board;
 import shop.mtcoding.jobara.board.model.BoardRepository;
@@ -81,24 +82,24 @@ public class BoardService {
         if (page == null) {
             page = 0;
         }
+
         List<BoardListRespDto> boardsList;
         PagingDto pagingDto;
         int startNum = page * PagingDto.ROW;
 
-        // System.out.println("==========");
-        // System.out.println("keyword : " + keyword);
-        // System.out.println("==========");
-
         if (uservo != null && uservo.getRole().equals("employee")) {
+
             boardsList = boardRepository.findAllWithCompany(startNum, keyword, PagingDto.ROW, uservo.getId());
             pagingDto = boardRepository.paging(page, keyword, PagingDto.ROW, uservo.getId());
+
         } else {
+
             boardsList = boardRepository.findAllWithCompany(startNum, keyword, PagingDto.ROW, 0);
             pagingDto = boardRepository.paging(page, keyword, PagingDto.ROW, 0);
         }
 
-        if (boardsList.size() == 0)
-            pagingDto.setNotResult(true);
+        // if (boardsList.size() == 0)
+        // pagingDto.setNotResult(true);
         pagingDto.makeBlockInfo(keyword);
         pagingDto.setBoardListDtos(boardsList);
 
@@ -110,11 +111,11 @@ public class BoardService {
         BoardUpdateRespDto boardDetailPS = boardRepository.findByIdForUpdate(id);
 
         if (boardDetailPS == null) {
-            throw new CustomException("없는 게시물을 수정할 수 없습니다", HttpStatus.BAD_REQUEST);
+            throw new CustomException("없는 게시물을 수정할 수 없습니다");
         }
 
         if (boardDetailPS.getUserId() != coPrincipalId) {
-            throw new CustomException("수정 권한이 없습니다", HttpStatus.BAD_REQUEST);
+            throw new CustomException("수정 권한이 없습니다");
         }
 
         String career = CareerParse.careerToString(boardDetailPS.getCareer());
@@ -137,11 +138,11 @@ public class BoardService {
 
         try {
         } catch (Exception e) {
-            throw new CustomApiException("없는 게시물을 수정할 수 없습니다", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomApiException("없는 게시물을 수정할 수 없습니다");
         }
 
         if (boardPS.getUserId() != coPrincipalId) {
-            throw new CustomApiException("수정 권한이 없습니다", HttpStatus.BAD_REQUEST);
+            throw new CustomApiException("수정 권한이 없습니다");
         }
 
         int career = CareerParse.careerToInt(boardUpdateReqDto.getCareerString());
@@ -155,7 +156,8 @@ public class BoardService {
                 career,
                 jobType,
                 education,
-                boardUpdateReqDto.getFavor());
+                boardUpdateReqDto.getFavor(),
+                boardUpdateReqDto.getDeadline());
 
         try {
             boardRepository.updateById(board);
@@ -177,7 +179,8 @@ public class BoardService {
                 career,
                 jobType,
                 education,
-                boardInsertReqDto.getFavor());
+                boardInsertReqDto.getFavor(),
+                boardInsertReqDto.getDeadline());
 
         try {
             boardRepository.insert(board);
@@ -203,6 +206,23 @@ public class BoardService {
         }
 
         return myBoardListPS;
+    }
+
+    @Transactional(readOnly = true)
+    public List<MyScrapBoardListRespDto> getMyScrapBoard(int coPrincipalId, int userId) {
+        // 권한 체크
+        if (coPrincipalId != userId) {
+            throw new CustomException("공고 리스트 열람 권한이 없습니다.");
+        }
+
+        List<MyScrapBoardListRespDto> myScrapBoardListPS;
+        try {
+            myScrapBoardListPS = boardRepository.findAllScrapByIdWithCompany(coPrincipalId);
+        } catch (Exception e) {
+            throw new CustomException("서버에 일시적인 문제가 생겼습니다", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return myScrapBoardListPS;
     }
 
     @Transactional
@@ -248,13 +268,31 @@ public class BoardService {
     }
 
     public List<BoardListRespDto> getLangMatchList(int userId) {
-
         return boardRepository.findAllByUserIdForLangMatching(userId);
     }
 
     @Transactional(readOnly = true)
     public List<Resume> getResume(int principalId) {
         return resumeRepository.findByUserId(principalId);
+    }
+
+    @Transactional
+    public void deleteBoard(int boardId, int principalId) {
+        Board boardPS = boardRepository.findById(boardId);
+        if (boardPS == null) {
+            throw new CustomApiException("삭제할 게시물이 존재하지 않습니다");
+        }
+
+        if (boardPS.getUserId() != principalId) {
+            throw new CustomApiException("게시글 삭제 권한이 없습니다");
+        }
+
+        try {
+            boardRepository.deleteById(boardId);
+        } catch (Exception e) {
+            throw new CustomApiException("서버에 일시적인 문제가 생겼습니다", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
 }

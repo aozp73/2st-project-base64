@@ -18,10 +18,11 @@ public class Board {
     private Integer jobType;
     private Integer education;
     private String favor;
+    private String deadline;
     private Timestamp createdAt;
 
     public Board(Integer id, Integer userId, String title, String content, Integer career, Integer jobType,
-            Integer education, String favor) {
+            Integer education, String favor, String deadline) {
         this.id = id;
         this.userId = userId;
         this.title = title;
@@ -30,10 +31,11 @@ public class Board {
         this.jobType = jobType;
         this.education = education;
         this.favor = favor;
+        this.deadline = deadline;
     }
 
     public Board(Integer userId, String title, String content, Integer career, Integer jobType, Integer education,
-            String favor) {
+            String favor, String deadline) {
         this.userId = userId;
         this.title = title;
         this.content = content;
@@ -41,6 +43,7 @@ public class Board {
         this.jobType = jobType;
         this.education = education;
         this.favor = favor;
+        this.deadline = deadline;
     }
 
 }
