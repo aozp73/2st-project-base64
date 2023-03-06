@@ -36,7 +36,7 @@ public class CompanyConetroller {
     @GetMapping("/company/updateForm")
     public String updateForm(Model model) {
         UserVo principal = (UserVo) session.getAttribute("principal");
-        Verify.validateObject(principal, "로그인이 필요합니다.", HttpStatus.UNAUTHORIZED, "/loginForm");
+        Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED, "/#login");
         Verify.checkRole(principal, "company");
         // if (!principal.getRole().equals("company")) {
         // throw new CustomException("권한이 없습니다.", HttpStatus.FORBIDDEN);
@@ -59,7 +59,7 @@ public class CompanyConetroller {
     public String update(CompanyUpdateReqDto companyUpdateReqDto, MultipartFile profile) {
 
         UserVo principal = (UserVo) session.getAttribute("principal");
-        Verify.validateObject(principal, "로그인이 필요합니다.", HttpStatus.UNAUTHORIZED, "/company/loginForm");
+        Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED, "/#login");
         Verify.checkRole(principal, "company");
 
         if (profile.isEmpty()) {

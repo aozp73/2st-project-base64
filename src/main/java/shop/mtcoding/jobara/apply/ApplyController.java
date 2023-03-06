@@ -45,7 +45,7 @@ public class ApplyController {
     @GetMapping("/company/{id}/apply")
     public String companyApplyList(@PathVariable Integer id, Model model) {
         UserVo principal = (UserVo) session.getAttribute("principal");
-        Verify.validateObject(principal, "로그인이 필요한 기능입니다");
+        Verify.validateObject(principal, "로그인이 필요한 기능입니다",HttpStatus.UNAUTHORIZED,"/#login");
         Verify.checkRole(principal, "company");
         Verify.isNotEqual(id, principal.getId(), "권한이 없습니다.", HttpStatus.FORBIDDEN);
         List<CompanyApplyRespDto> applyListPS = applyService.getApplyForCompany(id);
@@ -56,7 +56,7 @@ public class ApplyController {
     @GetMapping("/employee/{id}/apply")
     public String employeeApplyList(@PathVariable Integer id, Model model) {
         UserVo principal = (UserVo) session.getAttribute("principal");
-        Verify.validateObject(principal, "로그인이 필요한 기능입니다");
+        Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED, "/#login");
         Verify.checkRole(principal, "employee");
         Verify.isNotEqual(id, principal.getId(), "권한이 없습니다.", HttpStatus.FORBIDDEN);
         List<EmployeeApplyRespDto> applyListPS = applyService.getApplyForEmployee(id);

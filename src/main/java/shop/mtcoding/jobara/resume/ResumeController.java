@@ -46,7 +46,7 @@ public class ResumeController {
     @GetMapping("/resume/{id}")
     public String saveResumeForm(@PathVariable("id") Integer id, Model model) {
         UserVo principal = (UserVo) session.getAttribute("principal");
-        Verify.validateObject(principal, "로그인이 필요합니다.");
+        Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED, "/#login");
         Verify.checkRole(principal, "employee");
         Resume resumePS = resumeService.findById(principal.getId(), id);
         model.addAttribute("resume", resumePS);
@@ -56,7 +56,7 @@ public class ResumeController {
     @GetMapping("/resume/list")
     public String resumeList(Model model) {
         UserVo principal = (UserVo) session.getAttribute("principal");
-        Verify.validateObject(principal, "로그인이 필요합니다.");
+        Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED, "/#login");
         Verify.checkRole(principal, "employee");
         List<Resume> resumeListPS = resumeService.findByUserId(principal.getId());
         model.addAttribute("resumeList", resumeListPS);
@@ -66,7 +66,7 @@ public class ResumeController {
     @GetMapping("/resume/saveForm")
     public String saveForm() {
         UserVo principal = (UserVo) session.getAttribute("principal");
-        Verify.validateObject(principal, "로그인이 필요합니다.");
+        Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED, "/#login");
         Verify.checkRole(principal, "employee");
         return "resume/saveForm";
     }

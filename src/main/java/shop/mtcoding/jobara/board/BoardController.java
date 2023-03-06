@@ -76,8 +76,7 @@ public class BoardController {
         UserVo principal = (UserVo) session.getAttribute("principal");
 
         // 인증체크
-        Verify.validateObject(principal, "로그인이 필요한 페이지입니다.", HttpStatus.BAD_REQUEST,
-                "/company/loginForm");
+        Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED, "/#login");
         Verify.checkRole(principal, "company");
 
         return "board/saveForm";
@@ -89,9 +88,7 @@ public class BoardController {
         UserVo principal = (UserVo) session.getAttribute("principal");
 
         // 인증체크
-        Verify.validateObject(
-                principal, "로그인이 필요한 페이지입니다", HttpStatus.BAD_REQUEST,
-                "/company/loginForm");
+        Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED, "/#login");
         Verify.checkRole(principal, "company");
 
         List<Integer> boardSkill = boardService.getSkillForDetail(id);
@@ -108,7 +105,7 @@ public class BoardController {
         UserVo principal = (UserVo) session.getAttribute("principal");
         // 인증체크
         Verify.validateApiObject(
-                principal, "로그인이 필요한 페이지입니다", HttpStatus.BAD_REQUEST);
+                principal, "로그인이 필요한 페이지입니다", HttpStatus.UNAUTHORIZED);
         Verify.checkRoleApi(principal, "company");
 
         // 유효성
@@ -135,9 +132,7 @@ public class BoardController {
         UserVo principal = (UserVo) session.getAttribute("principal");
 
         // 인증체크
-        Verify.validateObject(
-                principal, "로그인이 필요한 페이지입니다", HttpStatus.BAD_REQUEST,
-                "/company/loginForm");
+        Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED, "/#login");
         Verify.checkRole(principal, "company");
 
         // 유효성
@@ -174,9 +169,7 @@ public class BoardController {
         UserVo principal = (UserVo) session.getAttribute("principal");
 
         // 인증체크
-        Verify.validateObject(
-                principal, "로그인이 필요한 페이지입니다", HttpStatus.BAD_REQUEST,
-                "/company/loginForm");
+        Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED, "/#login");
         Verify.checkRole(principal, "company");
 
         List<MyBoardListRespDto> myBoardListPS = boardService.getMyBoard(principal.getId(), id);

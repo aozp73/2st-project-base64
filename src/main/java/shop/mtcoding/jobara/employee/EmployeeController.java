@@ -78,7 +78,7 @@ public class EmployeeController {
     @GetMapping("/employee/updateForm")
     public String updateForm(Model model) {
         UserVo principal = (UserVo) session.getAttribute("principal");
-        Verify.validateObject(principal, "로그인이 필요합니다.");
+        Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED, "/#login");
         Verify.checkRole(principal, "employee");
         EmployeeUpdateRespDto employeeUpdateRespDto = employeeService.getEmployeeUpdateRespDto(principal.getId());
         List<Integer> employeeSkill = employeeService.getSkillForDetail(principal.getId());
@@ -108,7 +108,7 @@ public class EmployeeController {
     @PostMapping("/employee/update/{id}")
     public String update(EmployeeUpdateReqDto employeeUpdateReqDto, MultipartFile profile) {
         UserVo principal = (UserVo) session.getAttribute("principal");
-        Verify.validateObject(principal, "로그인이 필요합니다.", HttpStatus.UNAUTHORIZED, "/employee/loginForm");
+        Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED, "/#login");
         Verify.checkRole(principal, "employee");
         Verify.validateString(employeeUpdateReqDto.getPassword(), "암호를 입력하세요.");
         Verify.validateString(employeeUpdateReqDto.getEmail(), "이메일을 입력하세요.");
