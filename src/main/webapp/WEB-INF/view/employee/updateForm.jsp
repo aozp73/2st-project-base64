@@ -2,12 +2,14 @@
 
     <%@ include file="../layout/header.jsp" %>
 <div style="height: 100px;"></div>
-        <div class="container my-3 py-3 px-3">
-            <div class="justify-content-center d-flex py-3">
-                <h2>회원 정보 수정</h2>
-            </div>
+            <div class="container py-3 bg-white">
+            <div class="p-3">
+                <hr>
+                <h2 style="text-align: center;">회원 정보 수정</h2>
+                <hr>
+                </div>
             <div class="justify-content-center d-flex">
-                <div class="my-border-color-default px-3 py-3" style="width: 50%; ">
+                <div class="border border-primary rounded-1 px-3 py-3" style="width: 50%; ">
                     <form action="/employee/update/${employeeDto.id}" method="post" enctype="multipart/form-data" onsubmit="return valid()">
                     <input id="id" name="id" value="${employeeDto.id}" type="hidden">
                     <div class="row">
@@ -15,7 +17,7 @@
                             <div class="mb-3">
                                 <label for="exampleInputPassword" class="form-label">변경 비밀번호</label>
                                 <input type="password" name="password" id="password" class="form-control"
-                                    value="${employeeDto.password}" placeholder="Password" onchange="checkSamePassword()">
+                                     placeholder="Password" onchange="checkSamePassword()">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">비밀번호확인</label>
@@ -35,7 +37,7 @@
                                     <div class="form-group d-flex justify-content-center my-thumbnail-color-default "
                                         style="height: 150px; width: 150px; align-items: center">
 
-                                    <img id="imagePreview" src="${principal.profile == null ? "/images/defaultProfile.png" : usPrincipal.profile}" alt="Current Photo"
+                                    <img id="imagePreview" src="${principal.profile == null ? "/images/defaultProfile.png" : principal.profile}" alt="Current Photo"
                                                     class="img-fluid" style="height:80px; ">
                                     </div>
                                 </div>

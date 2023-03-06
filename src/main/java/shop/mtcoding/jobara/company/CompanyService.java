@@ -64,9 +64,10 @@ public class CompanyService {
     public UserVo updateCompany(CompanyUpdateReqDto companyUpdateReqDto, Integer principalId, MultipartFile profile) {
         String uuidImageName = PathUtil.writeImageFile(profile);
 
-        User user = new User(companyUpdateReqDto, principalId, uuidImageName);
+        String salt = Hash.makeSalt();
+        String hashPassword = Hash.encode(companyUpdateReqDto.getPassword() + salt);
+        User user = new User(companyUpdateReqDto, principalId, uuidImageName, hashPassword, salt);
         Company company = new Company(companyUpdateReqDto, principalId);
-
         try {
             userRepository.updateById(user);
             companyRepository.updateByUserId(company);

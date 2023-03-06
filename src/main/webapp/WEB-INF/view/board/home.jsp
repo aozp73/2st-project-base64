@@ -49,7 +49,7 @@
             <c:when test="${principal == null}">
 
                 <!-- Contact Section-->
-                <section class="page-section" id="login">
+                <section class="page-section bg-white" id="login">
                     <div class="container">
                         <!-- Contact Section Heading-->
                         <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Login</h2>
