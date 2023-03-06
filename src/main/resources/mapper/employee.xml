@@ -13,11 +13,21 @@
         <!-- select user_tb.*, real_name, education, career, title, content
         from user_tb, employee_tb, resume_tb
         where user_tb.id = employee_tb.user_id and employee_tb.user_id = resume_tb.user_id -->
-        select user_tb.*, real_name, education, career, title, content
-        from user_tb, employee_tb, resume_tb
-        where user_tb.id = employee_tb.user_id and employee_tb.user_id = resume_tb.user_id
+        SELECT user_tb.*, employee_tb.real_name, education, career, title, content
+        FROM user_tb
+        JOIN employee_tb ON user_tb.id = employee_tb.user_id
+        JOIN resume_tb ON employee_tb.user_id = resume_tb.user_id
+
+        WHERE (resume_tb.user_id, resume_tb.created_at) IN (
+
+                SELECT employee_tb.user_id, MAX(created_at)
+                FROM employee_tb
+                JOIN resume_tb ON employee_tb.user_id = resume_tb.user_id
+                GROUP BY employee_tb.user_id
+                )
+
         OFFSET #{startNum} ROWS 
-        FETCH NEXT #{row} ROWS ONLY
+        FETCH NEXT #{row} ROWS ONLY;
     </select>
 
     <select id="paging" resultType="shop.mtcoding.jobara.board.dto.BoardResp$PagingDto">
@@ -28,7 +38,19 @@
         case when #{page} = CEILING( count(*) / #{row} ) - 1 then 1
             else 0 
             end last
-        FROM resume_tb
+        FROM 
+            (SELECT user_tb.id
+            FROM user_tb
+            JOIN employee_tb ON user_tb.id = employee_tb.user_id
+            JOIN resume_tb ON employee_tb.user_id = resume_tb.user_id
+            WHERE (employee_tb.user_id, resume_tb.created_at) IN (
+                    SELECT employee_tb.user_id, MAX(created_at)
+                    FROM employee_tb
+                    JOIN resume_tb ON employee_tb.user_id = resume_tb.user_id
+                    GROUP BY employee_tb.user_id
+                    )
+            )
+
 	</select>
 
 

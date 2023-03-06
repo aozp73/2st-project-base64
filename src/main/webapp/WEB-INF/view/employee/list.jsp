@@ -72,12 +72,23 @@
                                                             src="/images/profile.jfif" alt="Card image">
                                                       <div class="card-body">
                                                             <div class="my-text-ellipsis">
+                                                            <c:choose>
+                                                               <c:when test="${employee.realName eq null}">
+                                                                  <h5>비공개</h5>
+                                                               </c:when>
+                                                            
+                                                               <c:otherwise>
                                                                   <h5>${employee.realName}</h5>
+                                                               </c:otherwise>
+                                                            </c:choose>
                                                             </div>
                                                             <div class="my-text-ellipsis">
                                                                   <c:choose>
                                                                         <c:when test="${employee.career == 0}">
                                                                               신입
+                                                                        </c:when>
+                                                                        <c:when test="${employee.career eq null}">
+                                                                              비공개
                                                                         </c:when>
                                                                         <c:otherwise>
                                                                               ${employee.career} 년차
@@ -85,7 +96,14 @@
                                                                   </c:choose>
                                                             </div>
                                                             <div class="my-text-ellipsis">
+                                                            <c:choose>
+                                                                  <c:when test="${employee.title eq null}">
+                                                                              비공개
+                                                                        </c:when>
+                                                                        <c:otherwise>
                                                                   ${employee.title}
+                                                                        </c:otherwise>
+                                                                  </c:choose>
                                                             </div>
                                                       </div>
                                                 </a>
