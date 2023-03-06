@@ -30,7 +30,7 @@
                                     onmouseenter="mouseEnterImages(this)" onmouseleave="mouseLeaveImages(this)">
                                     <div class="d-flex justify-content-center">
                                         <img class="card-img-top" style="height: 100px; max-width: 200px;"
-                                            src="${board.profile == null ? " /images/defaultProfile.png" :
+                                            src="${board.profile == null ? "/images/defaultProfile.png" :
                                             board.profile}" alt="Card image">
                                     </div>
                                     <div class="card-body">

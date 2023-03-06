@@ -50,9 +50,9 @@ public class EmployeeController {
     public String employeeList(Model model, Integer page) {
         UserVo principal = (UserVo) session.getAttribute("principal");
         PagingDto pagingPS = employeeService.getEmployee(page);
-
         model.addAttribute("pagingDto", pagingPS);
         model.addAttribute("principal", principal);
+        System.out.println("테스트 : " + pagingPS.getResumeListDtos().get(0).getProfile());
         if (principal != null) {
             if (principal.getRole().equals("company")) {
                 List<EmployeeAndResumeRespDto> recommendEmployeeListPS = employeeService

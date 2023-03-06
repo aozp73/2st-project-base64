@@ -56,11 +56,10 @@
                   
                   <c:forEach items="${pagingDto.resumeListDtos}" var="employee">
                         <div class="col-md-3 py-2">
-                              <div id="employee${employee.id}" onmouseenter="mouseEnterImages(this)"
+                              <div id="employee${employee.profile}" onmouseenter="mouseEnterImages(this)"
                                     onmouseleave="mouseLeaveImages(this)" class="card col-lg-12">
                                     <a href="/employee/${employee.id}" class="no_under_line_link">
-                                          <img class="card-img-top" style="height: 100px;" src="${user.profile == null ? " /images/newjeans.jpg" :
-                                            employee.profile}"
+                                          <img class="card-img-top" style="height: 100px;" src="${employee.profile == null ? " /images/newjeans.jpg" : employee.profile}"
                                                 alt="Card image">
                                           <div class="card-body">
                                                 <div class="my-text-ellipsis">

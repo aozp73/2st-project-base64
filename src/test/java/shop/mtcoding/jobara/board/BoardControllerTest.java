@@ -1,9 +1,11 @@
 package shop.mtcoding.jobara.board;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
@@ -51,13 +53,13 @@ public class BoardControllerTest {
     @BeforeEach
     public void setUp() {
         UserVo principal = new UserVo();
-        // principal.setId(6);
-        principal.setId(1);
-        // principal.setUsername("cos");
-        principal.setUsername("ssar");
-        // principal.setRole("company");
+        principal.setId(6);
+        // principal.setId(1);
+        principal.setUsername("cos");
+        // principal.setUsername("ssar");
+        principal.setRole("company");
 
-        principal.setRole("employee");
+        // principal.setRole("employee");
 
         mockSession = new MockHttpSession();
         mockSession.setAttribute("principal", principal);
@@ -281,5 +283,24 @@ public class BoardControllerTest {
         resultActions.andExpect(status().isOk());
         assertThat(boardList.get(0).getTitle()).isEqualTo("공고제목1");
         assertThat(boardList.get(1).getTitle()).isEqualTo("공고제목2");
+    }
+
+    @Test
+    public void delete_test() throws Exception {
+        // given
+        // int id = 100; // 삭제할 게시물이 존재하지 않습니다 테스트 완료
+        // int id = 5; // 게시글 삭제 권한이 없습니다 테스트 완료
+        int id = 1;
+
+        // when
+        ResultActions resultActions = mvc.perform(
+                delete("/board/" + id)
+                        .session(mockSession));
+
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(jsonPath("$.msg").value("게시글을 삭제하였습니다"));
     }
 }
