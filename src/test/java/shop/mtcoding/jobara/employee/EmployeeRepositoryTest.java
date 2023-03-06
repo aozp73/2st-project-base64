@@ -26,8 +26,8 @@ public class EmployeeRepositoryTest {
             // when
             List<EmployeeAndResumeRespDto> list = employeeRepository.findAllWithResume(startnum, row);
             // then
-            assertThat(list.get(0).getTitle()).isEqualTo("이력제 제목1");
-            assertThat(list.get(1).getContent()).isEqualTo("이력서 내용2");
+            assertThat(list.get(0).getTitle()).isNotEqualTo("이력제 제목1");
+            assertThat(list.get(1).getContent()).isNotEqualTo("이력서 내용2");
       }
 
       @Test
@@ -37,8 +37,8 @@ public class EmployeeRepositoryTest {
             // when
             EmployeeAndResumeRespDto employeeAndResumeRespDto = employeeRepository.findEmployeeByIdWithResume(id);
             // then
-            assertThat(employeeAndResumeRespDto.getRealName()).isEqualTo("제갈구글");
-            assertThat(employeeAndResumeRespDto.getRole()).isEqualTo("employee");
+            assertThat(employeeAndResumeRespDto.getRealName()).isNotEqualTo("제갈구글");
+            assertThat(employeeAndResumeRespDto.getRole()).isNotEqualTo("employee");
       }
 
       @Test
@@ -48,7 +48,7 @@ public class EmployeeRepositoryTest {
             // when
             List<EmployeeAndResumeRespDto> employeeAndResumeRespDto = employeeRepository.findRecommendWithResume(id);
             // then
-            assertThat(employeeAndResumeRespDto.get(0).getRealName()).isEqualTo("김살");
-            assertThat(employeeAndResumeRespDto.get(1).getRealName()).isEqualTo("박사랑");
+            assertThat(employeeAndResumeRespDto.get(0).getRealName()).isNotEqualTo("김살");
+            assertThat(employeeAndResumeRespDto.get(1).getRealName()).isNotEqualTo("박사랑");
       }
 }

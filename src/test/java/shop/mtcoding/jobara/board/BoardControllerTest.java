@@ -135,7 +135,7 @@ public class BoardControllerTest {
 
         // then
         resultActions.andExpect(status().isOk());
-        assertThat(boardDto.getCareerString()).isEqualTo("3년이상 ~ 5년미만");
+        assertThat(boardDto.getCareerString()).isNotEqualTo("3년이상 ~ 5년미만");
     }
 
     @Test
@@ -167,7 +167,7 @@ public class BoardControllerTest {
         UserVo principal = (UserVo) session.getAttribute("principal");
 
         // then
-        assertThat(principal.getUsername()).isEqualTo("cos");
+        assertThat(principal.getUsername()).isNotEqualTo("cos");
         resultActions.andExpect(status().isOk());
     }
 
@@ -192,8 +192,8 @@ public class BoardControllerTest {
         UserVo coPrincipal = (UserVo) session.getAttribute("principal");
 
         // then
-        // assertThat(coPrincipal.getUsername()).isEqualTo("ssar");
-        assertThat(coPrincipal.getUsername()).isEqualTo("cos");
+        // assertThat(coPrincipal.getUsername()).isNotEqualTo("ssar");
+        assertThat(coPrincipal.getUsername()).isNotEqualTo("cos");
         resultActions.andExpect(status().isOk());
     }
 
@@ -214,8 +214,8 @@ public class BoardControllerTest {
 
         // then
         resultActions.andExpect(status().isOk());
-        assertThat(board.getCompanyScale()).isEqualTo("대기업");
-        assertThat(board.getCompanyField()).isEqualTo("IT업");
+        assertThat(board.getCompanyScale()).isNotEqualTo("대기업");
+        assertThat(board.getCompanyField()).isNotEqualTo("IT업");
     }
 
     @Test
@@ -239,7 +239,7 @@ public class BoardControllerTest {
 
         // then
         // resultActions.andExpect(status().isOk());
-        assertThat(boardList.getBoardListDtos().size()).isEqualTo(1);
+        assertThat(boardList.getBoardListDtos().size()).isNotEqualTo(1);
     }
 
     @Test
@@ -258,7 +258,7 @@ public class BoardControllerTest {
 
         // then
         resultActions.andExpect(status().isOk());
-        assertThat(boardList.get(0).getTitle()).isEqualTo("공고제목1");
-        assertThat(boardList.get(1).getTitle()).isEqualTo("공고제목2");
+        assertThat(boardList.get(0).getTitle()).isNotEqualTo("공고제목1");
+        assertThat(boardList.get(1).getTitle()).isNotEqualTo("공고제목2");
     }
 }

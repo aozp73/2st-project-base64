@@ -78,9 +78,7 @@ public class BoardController {
         // 인증체크
         Verify.validateObject(principal, "로그인이 필요한 페이지입니다.", HttpStatus.BAD_REQUEST,
                 "/company/loginForm");
-        if (!principal.getRole().equals("company")) {
-            throw new CustomException("기업회원으로 로그인 해주세요.");
-        }
+        Verify.checkRole(principal, "company");
 
         return "board/saveForm";
     }
@@ -94,9 +92,7 @@ public class BoardController {
         Verify.validateObject(
                 principal, "로그인이 필요한 페이지입니다", HttpStatus.BAD_REQUEST,
                 "/company/loginForm");
-        if (!principal.getRole().equals("company")) {
-            throw new CustomException("기업회원으로 로그인 해주세요.");
-        }
+        Verify.checkRole(principal, "company");
 
         List<Integer> boardSkill = boardService.getSkillForDetail(id);
 
@@ -111,21 +107,20 @@ public class BoardController {
     public ResponseEntity<?> update(@PathVariable int id, @RequestBody BoardUpdateReqDto boardUpdateReqDto) {
         UserVo principal = (UserVo) session.getAttribute("principal");
         // 인증체크
-        Verify.validateObject(
-                principal, "로그인이 필요한 페이지입니다", HttpStatus.BAD_REQUEST,
-                "/company/loginForm");
-        if (!principal.getRole().equals("company")) {
-            throw new CustomApiException("기업회원으로 로그인 해주세요.");
-        }
+        Verify.validateApiObject(
+                principal, "로그인이 필요한 페이지입니다", HttpStatus.BAD_REQUEST);
+        Verify.checkRoleApi(principal, "company");
 
         // 유효성
-        if (boardUpdateReqDto.getCheckedValues().size() == 0) {
-            throw new CustomApiException("선호기술을 한 가지 이상 선택해주세요.");
-        }
+        Verify.isEqualApi(boardUpdateReqDto.getCheckedValues().size(), 0, "선호기술을 한 가지 이상 선택해주세요.",
+                HttpStatus.BAD_REQUEST);
+        // if (boardUpdateReqDto.getCheckedValues().size() == 0) {
+        // throw new CustomApiException("선호기술을 한 가지 이상 선택해주세요.");
+        // }
 
-        Verify.validateString(boardUpdateReqDto.getTitle(), "제목을 입력하세요");
-        Verify.validateString(boardUpdateReqDto.getContent(), "내용을 입력하세요");
-        Verify.validateString(boardUpdateReqDto.getCareerString(), "경력을 입력하세요");
+        Verify.validateApiString(boardUpdateReqDto.getTitle(), "제목을 입력하세요");
+        Verify.validateApiString(boardUpdateReqDto.getContent(), "내용을 입력하세요");
+        Verify.validateApiString(boardUpdateReqDto.getCareerString(), "경력을 입력하세요");
 
         boardService.updateBoard(boardUpdateReqDto, principal.getId());
         boardService.updateTech(boardUpdateReqDto.getCheckedValues(), id);
@@ -143,27 +138,29 @@ public class BoardController {
         Verify.validateObject(
                 principal, "로그인이 필요한 페이지입니다", HttpStatus.BAD_REQUEST,
                 "/company/loginForm");
-        if (!principal.getRole().equals("company")) {
-            throw new CustomException("기업회원으로 로그인 해주세요.");
-        }
+        Verify.checkRole(principal, "company");
 
         // 유효성
         Verify.validateString(boardInsertReqDto.getTitle(), "제목을 입력하세요");
         Verify.validateString(boardInsertReqDto.getContent(), "내용을 입력하세요");
 
-        if (boardInsertReqDto.getCareerString().equals("경력선택")) {
-            throw new CustomException("경력을 선택하세요");
-        }
-        if (boardInsertReqDto.getEducationString().equals("학력선택")) {
-            throw new CustomException("학력을 선택하세요");
-        }
-        if (boardInsertReqDto.getJobTypeString().equals("근무형태")) {
-            throw new CustomException("근무형태를 선택하세요");
-        }
+        Verify.isStringEquals(boardInsertReqDto.getCareerString(), "경력선택", "경력을 선택하세요", HttpStatus.BAD_REQUEST);
+        Verify.isStringEquals(boardInsertReqDto.getCareerString(), "학력선택", "학력을 선택하세요", HttpStatus.BAD_REQUEST);
+        Verify.isStringEquals(boardInsertReqDto.getCareerString(), "근무형태", "근무형태를 선택하세요", HttpStatus.BAD_REQUEST);
+        // if (boardInsertReqDto.getCareerString().equals("경력선택")) {
+        // throw new CustomException("경력을 선택하세요");
+        // }
+        // if (boardInsertReqDto.getEducationString().equals("학력선택")) {
+        // throw new CustomException("학력을 선택하세요");
+        // }
+        // if (boardInsertReqDto.getJobTypeString().equals("근무형태")) {
+        // throw new CustomException("근무형태를 선택하세요");
+        // }
 
-        if (checkLang.size() == 0) {
-            throw new CustomException("선호기술을 한 가지 이상 선택해주세요.");
-        }
+        Verify.isEqual(checkLang.size(), 0, "선호기술을 한 가지 이상 선택해주세요.", HttpStatus.BAD_REQUEST);
+        // if (checkLang.size() == 0) {
+        // throw new CustomException("선호기술을 한 가지 이상 선택해주세요.");
+        // }
 
         int boardId = boardService.insertBoard(boardInsertReqDto, principal.getId());
         boardService.insertSkill(checkLang, boardId);
@@ -180,10 +177,7 @@ public class BoardController {
         Verify.validateObject(
                 principal, "로그인이 필요한 페이지입니다", HttpStatus.BAD_REQUEST,
                 "/company/loginForm");
-
-        if (!principal.getRole().equals("company")) {
-            throw new CustomException("기업회원으로 로그인 해주세요.");
-        }
+        Verify.checkRole(principal, "company");
 
         List<MyBoardListRespDto> myBoardListPS = boardService.getMyBoard(principal.getId(), id);
         model.addAttribute("myBoardList", myBoardListPS);

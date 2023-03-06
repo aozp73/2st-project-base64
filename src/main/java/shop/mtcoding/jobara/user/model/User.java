@@ -5,6 +5,8 @@ import java.sql.Timestamp;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import shop.mtcoding.jobara.company.dto.CompanyReq.CompanyJoinReqDto;
+import shop.mtcoding.jobara.company.dto.CompanyReq.CompanyUpdateReqDto;
 
 @Getter
 @Setter
@@ -50,5 +52,24 @@ public class User {
         this.detailAddress = detailAddress;
         this.tel = tel;
         this.profile = profile;
+    }
+
+    public User(CompanyJoinReqDto companyJoinReqDto, String hashPassword, String salt) {
+        this.username = companyJoinReqDto.getUsername();
+        this.password = hashPassword;
+        this.email = companyJoinReqDto.getEmail();
+        this.address = companyJoinReqDto.getAddress();
+        this.detailAddress = companyJoinReqDto.getDetailAddress();
+        this.salt = salt;
+    }
+
+    public User(CompanyUpdateReqDto companyUpdateReqDto, int principalId, String profilePath) {
+        this.id = principalId;
+        this.password = companyUpdateReqDto.getPassword();
+        this.email = companyUpdateReqDto.getEmail();
+        this.address = companyUpdateReqDto.getAddress();
+        this.detailAddress = companyUpdateReqDto.getDetailAddress();
+        this.tel = companyUpdateReqDto.getTel();
+        this.profile = profilePath;
     }
 }

@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import shop.mtcoding.jobara.board.dto.BoardResp.PagingDto;
 import shop.mtcoding.jobara.common.dto.ResponseDto;
-import shop.mtcoding.jobara.common.ex.CustomException;
 import shop.mtcoding.jobara.common.util.Verify;
 import shop.mtcoding.jobara.employee.dto.EmployeeReq.EmployeeJoinReqDto;
 import shop.mtcoding.jobara.employee.dto.EmployeeReq.EmployeeLoginReqDto;
@@ -80,9 +79,7 @@ public class EmployeeController {
     public String updateForm(Model model) {
         UserVo principal = (UserVo) session.getAttribute("principal");
         Verify.validateObject(principal, "로그인이 필요합니다.");
-        if (!principal.getRole().equals("employee")) {
-            throw new CustomException("권한이 없습니다.", HttpStatus.FORBIDDEN);
-        }
+        Verify.checkRole(principal, "employee");
         EmployeeUpdateRespDto employeeUpdateRespDto = employeeService.getEmployeeUpdateRespDto(principal.getId());
         List<Integer> employeeSkill = employeeService.getSkillForDetail(principal.getId());
         model.addAttribute("employeeDto", employeeUpdateRespDto);
@@ -112,9 +109,7 @@ public class EmployeeController {
     public String update(EmployeeUpdateReqDto employeeUpdateReqDto, MultipartFile profile) {
         UserVo principal = (UserVo) session.getAttribute("principal");
         Verify.validateObject(principal, "로그인이 필요합니다.", HttpStatus.UNAUTHORIZED, "/employee/loginForm");
-        if (!principal.getRole().equals("employee")) {
-            throw new CustomException("권한이 없습니다.", HttpStatus.FORBIDDEN);
-        }
+        Verify.checkRole(principal, "employee");
         Verify.validateString(employeeUpdateReqDto.getPassword(), "암호를 입력하세요.");
         Verify.validateString(employeeUpdateReqDto.getEmail(), "이메일을 입력하세요.");
         Verify.validateString(employeeUpdateReqDto.getAddress(), "주소를 입력하세요.");
@@ -133,10 +128,8 @@ public class EmployeeController {
     public ResponseEntity<?> update(@PathVariable int id,
             @RequestBody EmployeeTechUpdateReqDto employeeTechUpdateReqDto) {
         UserVo principal = (UserVo) session.getAttribute("principal");
-        Verify.validateObject(principal, "로그인이 필요합니다.", HttpStatus.UNAUTHORIZED, "/employee/loginForm");
-        if (!principal.getRole().equals("employee")) {
-            throw new CustomException("권한이 없습니다.", HttpStatus.FORBIDDEN);
-        }
+        Verify.validateApiObject(principal, "로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
+        Verify.checkRoleApi(principal, "employee");
         if (employeeTechUpdateReqDto.getCheckedValues() != null) {
             employeeService.updateEmpolyeeTech(employeeTechUpdateReqDto.getCheckedValues(), principal.getId());
         }
