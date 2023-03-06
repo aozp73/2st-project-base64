@@ -52,7 +52,7 @@
         on at.user_id = rt.user_id
         inner join board_tb bt
         on at.board_id = bt.id
-        where at.user_id = #{userId}
+        where at.user_id = #{userId} and at.resume_id = rt.id
     </select>  
     <select id="findByIdWithBoardForMail" resultType="shop.mtcoding.jobara.apply.dto.ApplyResp$MailDto">
         select at.id, at.user_id, at.board_id, at.resume_id, at.state, bt.title board_title
