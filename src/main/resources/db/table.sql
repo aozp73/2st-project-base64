@@ -44,6 +44,7 @@ create table board_tb(
     job_type varchar,
     education varchar,
     favor varchar,
+    deadline varchar,
     created_at timestamp not null
 );
 
