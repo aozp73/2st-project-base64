@@ -41,9 +41,11 @@ public class ApplyService {
         Apply apply = new Apply(principalId, applyReqDto);
         Board boardPS = boardRepository.findById(apply.getBoardId());
         Verify.validateApiObject(boardPS, "존재하지 않는 게시물 입니다.");
-        if (applyRepository.findByUserIdAndBoardId(apply) != null) {
-            throw new CustomApiException("이미 지원한 공고입니다.");
-        }
+        Verify.isNotEqualApi(applyRepository.findByUserIdAndBoardId(apply), null, "이미 지원한 공고입니다.",
+                HttpStatus.BAD_REQUEST);
+        // if (applyRepository.findByUserIdAndBoardId(apply) != null) {
+        // throw new CustomApiException("이미 지원한 공고입니다.");
+        // }
         try {
             applyRepository.insert(apply);
         } catch (Exception e) {
@@ -67,9 +69,11 @@ public class ApplyService {
         Verify.validateApiObject(user, "존재하지 않는 유저입니다.");
         Apply apply = new Apply(boradId, applyDecideReqDto.getUserId());
         Apply applyPS = applyRepository.findByUserIdAndBoardId(apply);
-        if (applyPS == null) {
-            throw new CustomApiException("존재하지 않는 지원입니다.");
-        }
+        Verify.isEqualApi(applyRepository.findByUserIdAndBoardId(apply), null,
+                "존재하지 않는 지원입니다.", HttpStatus.BAD_REQUEST);
+        // if (applyPS == null) {
+        // throw new CustomApiException("존재하지 않는 지원입니다.");
+        // }
         applyPS.setState(applyDecideReqDto.getState());
         try {
             applyRepository.updateById(applyPS);
@@ -83,7 +87,7 @@ public class ApplyService {
             }).start();
 
         } catch (Exception e) {
-           // 로그만 남기고!!
+            // 로그만 남기고!!
         }
     }
 

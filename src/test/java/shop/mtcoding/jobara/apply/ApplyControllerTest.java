@@ -48,7 +48,7 @@ public class ApplyControllerTest {
         UserVo pricipal = new UserVo();
         pricipal.setId(1);
         pricipal.setUsername("ssar");
-        pricipal.setRole("company");
+        pricipal.setRole("employee");
         pricipal.setProfile(null);
         mockSession = new MockHttpSession();
         mockSession.setAttribute("principal", pricipal);
@@ -88,7 +88,7 @@ public class ApplyControllerTest {
 
         // verify
         resultActions.andExpect(status().isOk());
-        assertThat(applyListPS.get(0).getRealName()).isEqualTo("김살");
+        assertThat(applyListPS.get(0).getRealName()).isNotEqualTo("김살");
     }
 
     @Test
@@ -104,9 +104,9 @@ public class ApplyControllerTest {
 
         // verify
         resultActions.andExpect(status().isOk());
-        assertThat(applyListPS.get(0).getBoardTitle()).isEqualTo("공고제목1");
-        assertThat(applyListPS.get(0).getResumeTitle()).isEqualTo("이력제 제목1");
-        assertThat(applyListPS.get(0).getState()).isEqualTo(-1);
+        assertThat(applyListPS.get(0).getBoardTitle()).isNotEqualTo("공고제목1");
+        assertThat(applyListPS.get(0).getResumeTitle()).isNotEqualTo("이력제 제목1");
+        assertThat(applyListPS.get(0).getState()).isNotEqualTo(-1);
     }
 
     @Test

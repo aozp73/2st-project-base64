@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
-import shop.mtcoding.jobara.board.dto.BoardResp.BoardListRespDto;
 import shop.mtcoding.jobara.board.dto.BoardResp.PagingDto;
 import shop.mtcoding.jobara.common.ex.CustomException;
 import shop.mtcoding.jobara.common.util.Hash;
@@ -95,14 +94,8 @@ public class EmployeeService {
         if (userRepository.findByUsername(employeeJoinReqDto.getUsername()) != null) {
             throw new CustomException("이미 존재하는 유저네임 입니다.");
         }
-        String hashPassword = null;
-        String salt = null;
-        try {
-            salt = Hash.makeSalt();
-            hashPassword = Hash.encode(employeeJoinReqDto.getPassword() + salt);
-        } catch (Exception e) {
-            throw new CustomException("서버 오류 : 복호화 실패", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        String salt = Hash.makeSalt();
+        String hashPassword = Hash.encode(employeeJoinReqDto.getPassword() + salt);
         User user = new User(employeeJoinReqDto.getUsername(), hashPassword,
                 employeeJoinReqDto.getEmail());
         user.setSalt(salt);
@@ -119,10 +112,9 @@ public class EmployeeService {
             MultipartFile profile) {
         String uuidImageName = PathUtil.writeImageFile(profile);
 
-        User user = new User(principalId, employeeUpdateReqDto.getPassword(), employeeUpdateReqDto.getEmail(),
-                employeeUpdateReqDto.getAddress(), employeeUpdateReqDto.getDetailAddress(),
-                employeeUpdateReqDto.getTel(),
-                uuidImageName);
+        String salt = Hash.makeSalt();
+        String hashPassword = Hash.encode(employeeUpdateReqDto.getPassword() + salt);
+        User user = new User(employeeUpdateReqDto, principalId, uuidImageName, hashPassword, salt);
         Employee employee = new Employee(principalId, employeeUpdateReqDto.getRealName(),
                 employeeUpdateReqDto.getCareer(),
                 employeeUpdateReqDto.getEducation());

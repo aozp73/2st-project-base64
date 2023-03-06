@@ -4,9 +4,11 @@
 
         <div style="height: 100px;"></div>
 
-        <div class="container my-3 py-3 px-3">
+            <div class="container py-3 bg-white">
             <div class="justify-content-center d-flex py-3">
+                <hr>
                 <h2>회원가입</h2>
+                <hr>
             </div>
             <div class="justify-content-center d-flex">
                 <nav class="navbar navbar-expand-sm bg-light navbar-light" style="width: 50%;">

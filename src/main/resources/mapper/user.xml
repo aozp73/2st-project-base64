@@ -25,6 +25,7 @@
     <update id="updateById">
         update user_tb 
            set password = #{password}, 
+               salt = #{salt},
                email = #{email}, 
                address = #{address},
                detail_address = #{detailAddress},

@@ -3,6 +3,7 @@ package shop.mtcoding.jobara.company.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import shop.mtcoding.jobara.company.dto.CompanyReq.CompanyUpdateReqDto;
 
 /*
  * create table company_tb(
@@ -35,5 +36,12 @@ public class Company {
         this.companyName = companyName;
         this.companyScale = companyScale;
         this.companyField = companyField;
+    }
+
+    public Company(CompanyUpdateReqDto companyUpdateReqDto, Integer principalId) {
+        this.companyName = companyUpdateReqDto.getCompanyName();
+        this.companyScale = companyUpdateReqDto.getCompanyScale();
+        this.companyField = companyUpdateReqDto.getCompanyField();
+        this.userId = principalId;
     }
 }

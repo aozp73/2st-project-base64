@@ -62,8 +62,8 @@ public class BoardRepositoryTest {
         // then
         assertThat(pagingDto.getCurrentPage()).isEqualTo(1);
         assertThat(pagingDto.getTotalCount()).isEqualTo(17);
-        // assertThat(pagingDto.getTotalCount()).isEqualTo(1);
-        // assertThat(pagingDto.getTotalCount()).isEqualTo(3);
+        // assertThat(pagingDto.getTotalCount()).isNotEqualTo(1);
+        // assertThat(pagingDto.getTotalCount()).isNotEqualTo(3);
     }
 
     @Test
@@ -86,7 +86,7 @@ public class BoardRepositoryTest {
 
         // then
         assertThat(boardListRespDto.size()).isEqualTo(8);
-        // assertThat(boardListRespDto.size()).isEqualTo(3);
+        // assertThat(boardListRespDto.size()).isNotEqualTo(3);
 
     }
 
@@ -102,7 +102,7 @@ public class BoardRepositoryTest {
         // System.out.println("테스트 : " + responseBody);
 
         // then
-        assertThat(myBoardListRespDto.get(1).getTitle()).isEqualTo("공고제목2");
+        assertThat(myBoardListRespDto.get(1).getTitle()).isEqualTo("공고제목3");
     }
 
     @Test

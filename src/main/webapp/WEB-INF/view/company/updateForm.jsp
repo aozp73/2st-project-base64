@@ -1,13 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
     <%@ include file="../layout/header.jsp" %>
-<div style="height: 100px;"></div>
-        <div class="container my-3 py-3 px-3">
-            <div class="justify-content-center d-flex py-3">
-                <h2>정보수정</h2>
+        <div style="height: 100px;"></div>
+        <div class="container py-3 bg-white">
+            <div class="p-3">
+                <hr>
+                <h2 style="text-align: center;">회원 정보 수정</h2>
+                <hr>
             </div>
             <div class="justify-content-center d-flex mb-3">
-                <div class="my-border-color-default px-3 py-3" style="width: 50%; ">
+                <div class="border border-primary rounded-1 px-3 py-3" style="width: 50%; ">
                     <form method="post" action="/company/update" enctype="multipart/form-data"
                         onsubmit="return valid()">
 
@@ -74,8 +76,7 @@
                         <div class="mb-3">
                             <label for="exampleInputPassword" class="form-label">변경 비밀번호</label>
                             <input type="password" name="password" id="password" class="form-control"
-                                value="${companyDto.password}" placeholder="Password" onchange="checkSamePassword()"
-                                style="width:100%">
+                                placeholder="Password" onchange="checkSamePassword()" style="width:100%">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">비밀번호확인</label>

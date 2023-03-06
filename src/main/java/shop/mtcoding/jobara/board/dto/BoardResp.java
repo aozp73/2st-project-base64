@@ -17,6 +17,9 @@ public class BoardResp {
         private String companyName;
         private Integer userId;
         private String profile;
+        private String dday;
+        private Integer loveId = 0;
+        private String css = "";
     }
 
     @Getter
@@ -27,6 +30,21 @@ public class BoardResp {
         private String companyName;
         private Integer userId;
         private String profile;
+        private String dday;
+
+    }
+
+    @Getter
+    @Setter
+    public static class MyScrapBoardListRespDto {
+        private Integer id;
+        private String title;
+        private String companyName;
+        private Integer userId;
+        private String profile;
+        private String dday;
+        private Integer loveId;
+        private String css;
     }
 
     @Getter
@@ -54,6 +72,7 @@ public class BoardResp {
         private String jobTypeString;
 
         private String favor;
+        private String deadline;
         private Integer userId;
     }
 

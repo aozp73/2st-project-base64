@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import shop.mtcoding.jobara.common.dto.ResponseDto;
-import shop.mtcoding.jobara.common.ex.CustomException;
 import shop.mtcoding.jobara.common.util.Verify;
 import shop.mtcoding.jobara.resume.dto.ResumeReq.ResumeSaveReq;
 import shop.mtcoding.jobara.resume.dto.ResumeReq.ResumeUpdateReq;
@@ -35,10 +34,8 @@ public class ResumeController {
     @PostMapping("/resume/update/{id}")
     public ResponseEntity<?> updateResume(@PathVariable Integer id, @RequestBody ResumeUpdateReq resumeUpdateReq) {
         UserVo principal = (UserVo) session.getAttribute("principal");
-        Verify.validateObject(principal, "로그인이 필요합니다.");
-        if (!principal.getRole().equals("employee")) {
-            throw new CustomException("권한이 없습니다.", HttpStatus.FORBIDDEN);
-        }
+        Verify.validateApiObject(principal, "로그인이 필요합니다.");
+        Verify.checkRoleApi(principal, "employee");
         if (resumeUpdateReq.getTitle() == null) {
             resumeUpdateReq.setTitle("무제");
         }
@@ -49,10 +46,8 @@ public class ResumeController {
     @GetMapping("/resume/{id}")
     public String saveResumeForm(@PathVariable("id") Integer id, Model model) {
         UserVo principal = (UserVo) session.getAttribute("principal");
-        Verify.validateObject(principal, "로그인이 필요합니다.");
-        if (!principal.getRole().equals("employee")) {
-            throw new CustomException("권한이 없습니다.", HttpStatus.FORBIDDEN);
-        }
+        Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED, "/#login");
+        Verify.checkRole(principal, "employee");
         Resume resumePS = resumeService.findById(principal.getId(), id);
         model.addAttribute("resume", resumePS);
         return "resume/updateForm";
@@ -61,10 +56,8 @@ public class ResumeController {
     @GetMapping("/resume/list")
     public String resumeList(Model model) {
         UserVo principal = (UserVo) session.getAttribute("principal");
-        Verify.validateObject(principal, "로그인이 필요합니다.");
-        if (!principal.getRole().equals("employee")) {
-            throw new CustomException("권한이 없습니다.", HttpStatus.FORBIDDEN);
-        }
+        Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED, "/#login");
+        Verify.checkRole(principal, "employee");
         List<Resume> resumeListPS = resumeService.findByUserId(principal.getId());
         model.addAttribute("resumeList", resumeListPS);
         return "resume/list";
@@ -73,10 +66,8 @@ public class ResumeController {
     @GetMapping("/resume/saveForm")
     public String saveForm() {
         UserVo principal = (UserVo) session.getAttribute("principal");
-        Verify.validateObject(principal, "로그인이 필요합니다.");
-        if (!principal.getRole().equals("employee")) {
-            throw new CustomException("권한이 없습니다.", HttpStatus.FORBIDDEN);
-        }
+        Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED, "/#login");
+        Verify.checkRole(principal, "employee");
         return "resume/saveForm";
     }
 
@@ -97,10 +88,8 @@ public class ResumeController {
     @DeleteMapping("/resume/{id}/delete")
     public ResponseEntity<?> deleteResume(@PathVariable int id) {
         UserVo principal = (UserVo) session.getAttribute("principal");
-        Verify.validateObject(principal, "로그인이 필요합니다.");
-        if (!principal.getRole().equals("employee")) {
-            throw new CustomException("권한이 없습니다.", HttpStatus.FORBIDDEN);
-        }
+        Verify.validateApiObject(principal, "로그인이 필요합니다.");
+        Verify.checkRoleApi(principal, "employee");
         resumeService.deleteResume(id, principal.getId());
         return new ResponseEntity<>(new ResponseDto<>(1, "삭제 완료", null), HttpStatus.OK);
     }

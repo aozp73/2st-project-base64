@@ -1,9 +1,11 @@
 package shop.mtcoding.jobara.board;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
@@ -32,6 +34,7 @@ import shop.mtcoding.jobara.board.dto.BoardResp.BoardDetailRespDto;
 import shop.mtcoding.jobara.board.dto.BoardResp.BoardMainRespDto;
 import shop.mtcoding.jobara.board.dto.BoardResp.BoardUpdateRespDto;
 import shop.mtcoding.jobara.board.dto.BoardResp.MyBoardListRespDto;
+import shop.mtcoding.jobara.board.dto.BoardResp.MyScrapBoardListRespDto;
 import shop.mtcoding.jobara.board.dto.BoardResp.PagingDto;
 import shop.mtcoding.jobara.user.vo.UserVo;
 
@@ -52,10 +55,10 @@ public class BoardControllerTest {
     public void setUp() {
         UserVo principal = new UserVo();
         principal.setId(6);
-        // principal.setId(1);
         principal.setUsername("cos");
         principal.setRole("company");
-
+        // principal.setId(1);
+        // principal.setUsername("ssar");
         // principal.setRole("employee");
 
         mockSession = new MockHttpSession();
@@ -98,6 +101,10 @@ public class BoardControllerTest {
         boardUpdateReqDto.setEducationString("4년 대졸이상");
         boardUpdateReqDto.setJobTypeString("정규직");
         boardUpdateReqDto.setFavor("관련 프로젝트 경험");
+        // boardUpdateReqDto.setDeadline("2023-03-05");
+        // boardUpdateReqDto.setDeadline("2023-12-01");
+        // 테스트일자 03-06 -> 1~100일 이내 마감일자 안내구문 테스트 완료
+        boardUpdateReqDto.setDeadline("2023-05-21");
         ArrayList<Integer> arrayList = new ArrayList<>(Arrays.asList(1, 3, 5, 7));
         boardUpdateReqDto.setCheckedValues(arrayList);
 
@@ -142,11 +149,15 @@ public class BoardControllerTest {
     public void save_test() throws Exception {
         // given
         String requestBody = "title=테스트제목&content=테스트내용&careerString=1년이상 ~ 3년미만&educationString=4년 대졸이상&jobTypeString=정규직&favor=관련프로젝트 경험&userId=6&checkLang=2&checkLang=4&checkLang=6";
+        String deadline = "&deadline=2023-05-13";
+        // String deadline = "&deadline=2023-03-01";
+        // String deadline = "&deadline=2023-12-01";
+        // 테스트일자 03-06 -> 1~100일 이내 마감일자 안내구문 테스트 완료
 
         // when
         ResultActions resultActions = mvc.perform(
                 post("/board/save")
-                        .content(requestBody)
+                        .content(requestBody + deadline)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                         .session(mockSession));
 
@@ -157,6 +168,8 @@ public class BoardControllerTest {
     @Test
     public void saveForm_test() throws Exception {
         // given
+        // board saveForm 들어가기 위해선 기업회원이어야 함
+        // 구직회원이 시도할 경우 안내문구 출력 테스트 완료
 
         // when
         ResultActions resultActions = mvc.perform(
@@ -192,7 +205,7 @@ public class BoardControllerTest {
         UserVo coPrincipal = (UserVo) session.getAttribute("principal");
 
         // then
-        // assertThat(coPrincipal.getUsername()).isEqualTo("ssar");
+        // assertThat(coPrincipal.getUsername()).isNotEqualTo("ssar");
         assertThat(coPrincipal.getUsername()).isEqualTo("cos");
         resultActions.andExpect(status().isOk());
     }
@@ -204,18 +217,27 @@ public class BoardControllerTest {
 
         // when
         ResultActions resultActions = mvc.perform(
+                // get("/board/" + id).session(mockSession)); // 구직회원으로 로그인하여 session 저장 시 좋아요
+                // 정보 확인 완료
                 get("/board/" + id));
 
         Map<String, Object> map = resultActions.andReturn().getModelAndView().getModel();
         BoardDetailRespDto board = (BoardDetailRespDto) map.get("board");
+        // LoveDetailRespDto love = (LoveDetailRespDto) map.get("love");
 
-        // String model = om.writeValueAsString(board);
-        // System.out.println("테스트 : " + model);
+        // String boardModel = om.writeValueAsString(board);
+        // System.out.println("테스트 : " + boardModel);
+
+        // String loveModel = om.writeValueAsString(love);
+        // System.out.println("테스트 : " + loveModel);
+        // System.out.println("테스트 : " + love.getId());
 
         // then
         resultActions.andExpect(status().isOk());
         assertThat(board.getCompanyScale()).isEqualTo("대기업");
         assertThat(board.getCompanyField()).isEqualTo("IT업");
+        // assertThat(love.getId()).isEqualTo(1);
+        // assertThat(love.getCss()).isEqualTo("fa-solid");
     }
 
     @Test
@@ -224,7 +246,7 @@ public class BoardControllerTest {
         // String keyword = "lang";
         // Integer page = 1; userId=1, role="employee" 의 세션 (ssar 로그인) 일 때 테스트 완료
         String keyword = null;
-        Integer page = 2;
+        Integer page = 0;
 
         // when
         ResultActions resultActions = mvc.perform(
@@ -234,13 +256,38 @@ public class BoardControllerTest {
         Map<String, Object> map = resultActions.andReturn().getModelAndView().getModel();
         PagingDto boardList = (PagingDto) map.get("pagingDto");
 
-        // String model = om.writeValueAsString(boardList.getBoardListDtos());
-        // System.out.println("테스트 : " + model);
+        String model = om.writeValueAsString(boardList.getBoardListDtos());
+        System.out.println("테스트 : " + model);
 
         // then
-        // resultActions.andExpect(status().isOk());
-        assertThat(boardList.getBoardListDtos().size()).isEqualTo(1);
+        resultActions.andExpect(status().isOk());
+        assertThat(boardList.getBoardListDtos().size()).isEqualTo(8);
+        // assertThat(boardList.getBoardListDtos().get(0).getCss()).isEqualTo("fa-solid");
     }
+
+    // @Test 구직회원 로그인시 테스트 완료
+    // public void scrapList_test() throws Exception {
+    // // given
+    // int id = 1;
+
+    // // when
+    // ResultActions resultActions = mvc.perform(
+    // get("/board/scrapList/" + id)
+    // .session(mockSession));
+
+    // Map<String, Object> map =
+    // resultActions.andReturn().getModelAndView().getModel();
+    // List<MyScrapBoardListRespDto> myScrapList = (List<MyScrapBoardListRespDto>)
+    // map.get("myScrapBoardList");
+
+    // String model = om.writeValueAsString(myScrapList);
+    // System.out.println("테스트 : " + model);
+
+    // // then
+    // resultActions.andExpect(status().isOk());
+    // assertThat(myScrapList.size()).isEqualTo(2);
+    // assertThat(myScrapList.get(0).getCss()).isEqualTo("fa-solid");
+    // }
 
     @Test
     public void boardMainList_test() throws Exception {
@@ -260,5 +307,24 @@ public class BoardControllerTest {
         resultActions.andExpect(status().isOk());
         assertThat(boardList.get(0).getTitle()).isEqualTo("공고제목1");
         assertThat(boardList.get(1).getTitle()).isEqualTo("공고제목2");
+    }
+
+    @Test
+    public void delete_test() throws Exception {
+        // given
+        // int id = 100; // 삭제할 게시물이 존재하지 않습니다 테스트 완료
+        // int id = 5; // 게시글 삭제 권한이 없습니다 테스트 완료
+        int id = 1;
+
+        // when
+        ResultActions resultActions = mvc.perform(
+                delete("/board/" + id)
+                        .session(mockSession));
+
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(jsonPath("$.msg").value("게시글을 삭제하였습니다"));
     }
 }

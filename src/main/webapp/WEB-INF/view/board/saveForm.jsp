@@ -77,7 +77,7 @@
 
                             <div>
 
-                                <div class="ms-1 ps-1" style="display: grid; grid-template-columns: 2.7fr 7.3fr;">
+                                <div class="ms-1 ps-2" style="display: grid; grid-template-columns: 3.5fr 7.3fr;">
 
                                     <div class="mt-1">
                                         <div>근무형태</div>
@@ -86,7 +86,7 @@
                                     <div class="mt-1">
                                         <div>
                                             <select name="jobTypeString" class="career my-border-color-default"
-                                                style="width: 80%;">
+                                                style="width: 85%;">
                                                 <option>근무형태</option>
                                                 <option>인턴</option>
                                                 <option>정규직</option>
@@ -110,7 +110,7 @@
 
                                         <div>
                                             <div class="Deadline">
-                                                <input type="date"
+                                                <input type="date" name="deadline";
                                                     class="form-control text-primary my-border-color-default"
                                                     style="width:90%" id="Deadline">
                                             </div>

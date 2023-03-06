@@ -83,7 +83,7 @@
 
                             <div>
 
-                                <div class="ms-1 ps-1" style="display: grid; grid-template-columns: 2.7fr 7.3fr;">
+                                <div class="ms-1 ps-2" style="display: grid; grid-template-columns: 3.5fr 7.3fr;">
 
                                     <div class="mt-1">
                                         <div>근무형태</div>
@@ -92,7 +92,7 @@
                                     <div class="mt-1">
                                         <div>
                                             <select id="jobTypeString" name="jobTypeString"
-                                                class="career my-border-color-default" style="width: 80%;">
+                                                class="career my-border-color-default" style="width: 85%;">
                                                 <option ${boardDetail.jobTypeString=="인턴" ? "selected" : "" }>인턴
                                                 </option>
                                                 <option ${boardDetail.jobTypeString=="정규직" ? "selected" : "" }>정규직
@@ -117,9 +117,9 @@
 
                                         <div>
                                             <div class="Deadline">
-                                                <input type="date"
+                                                <input type="date" name="deadline"
                                                     class="form-control text-primary my-border-color-default"
-                                                    style="width:90%" id="Deadline">
+                                                    style="width:90%" id="deadline" value="${boardDetail.deadline}">
                                             </div>
                                         </div>
 
@@ -280,6 +280,7 @@
                 let jobTypeString = $("#jobTypeString").val();
                 let favor = $("#favor").val();
                 let userId = $("#userId").val();
+                let deadline = $("#deadline").val();
 
                 let checkedValues = [];
                 $('input[name="lang"]:checked').each(function () {
@@ -295,6 +296,7 @@
                     jobTypeString: jobTypeString,
                     favor: favor,
                     userId: userId,
+                    deadline: deadline,
                     checkedValues: checkedValues
                 };
 

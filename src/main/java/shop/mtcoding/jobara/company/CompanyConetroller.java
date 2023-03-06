@@ -36,10 +36,11 @@ public class CompanyConetroller {
     @GetMapping("/company/updateForm")
     public String updateForm(Model model) {
         UserVo principal = (UserVo) session.getAttribute("principal");
-        Verify.validateObject(principal, "로그인이 필요합니다.", HttpStatus.UNAUTHORIZED, "/loginForm");
-        if (!principal.getRole().equals("company")) {
-            throw new CustomException("권한이 없습니다.", HttpStatus.FORBIDDEN);
-        }
+        Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED, "/#login");
+        Verify.checkRole(principal, "company");
+        // if (!principal.getRole().equals("company")) {
+        // throw new CustomException("권한이 없습니다.", HttpStatus.FORBIDDEN);
+        // }
         CompanyUpdateRespDto companyUpdateRespDto = companyService.getCompanyUpdateRespDto(principal.getId());
         model.addAttribute("companyDto", companyUpdateRespDto);
         return "company/updateForm";
@@ -58,10 +59,8 @@ public class CompanyConetroller {
     public String update(CompanyUpdateReqDto companyUpdateReqDto, MultipartFile profile) {
 
         UserVo principal = (UserVo) session.getAttribute("principal");
-        Verify.validateObject(principal, "로그인이 필요합니다.", HttpStatus.UNAUTHORIZED, "/company/loginForm");
-        if (!principal.getRole().equals("company")) {
-            throw new CustomException("권한이 없습니다.", HttpStatus.FORBIDDEN);
-        }
+        Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED, "/#login");
+        Verify.checkRole(principal, "company");
 
         if (profile.isEmpty()) {
             throw new CustomException("사진이 전송되지 않았습니다");
