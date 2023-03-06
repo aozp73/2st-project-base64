@@ -18,6 +18,11 @@
         where user_id = #{userId}
     </select>
 
+    <select id="findByIdWithSkillNameForDetail" resultType="String">
+        SELECT Skill_name FROM employeetech_tb, skill_tb
+        where user_id = #{userId} and employeetech_tb.skill = skill_tb.skill_code
+    </select>
+
     <insert id="insert">
         insert into employeetech_tb (user_id, skill) values(#{userId}, #{skill})
     </insert>

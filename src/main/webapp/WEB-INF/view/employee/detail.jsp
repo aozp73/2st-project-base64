@@ -47,7 +47,7 @@
                                                     비공개
                                                 </c:when>
                                                 <c:otherwise>
-                                                    ${employee.realName}
+                                                    ${employee.address}
                                                 </c:otherwise>
                                             </c:choose><br>
                                             <c:choose>
@@ -72,23 +72,7 @@
                                         </div>
                                     </div>
                                 </li>
-                                <li class="nav-item">
-                                    <div class="row">
-                                        <div class="col-3 ps-3 pe-0">
-                                            경력 :
-                                        </div>
-                                        <div class="col-9 ps-0">
-                                            <c:choose>
-                                                <c:when test="${employee.career == 0}">
-                                                    신입
-                                                </c:when>
-                                                <c:otherwise>
-                                                    ${employee.career} 년차
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </div>
-                                    </div>
-                                </li>
+                                
                             </ul>
                         </div>
                         <div class="col-10 m-3 p-3">
@@ -165,26 +149,49 @@
                         <hr>
                         <h5>핵심 경력</h5>
                         <ul class="nav nav-pills flex-column">
+                        <li class="nav-item">
+                                    <div class="row">
+                                        <div class="col-2 ps-3 pe-0">
+                                            경력 :
+                                        </div>
+                                        <div class="col-9 ps-0">
+                                            <c:choose>
+                                                <c:when test="${employee.career == 0}">
+                                                    신입
+                                                </c:when>
+                                                <c:otherwise>
+                                                    개발직종  ${employee.career} 년차
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </div>
+                                    </div>
+                                </li>
+                                <h5>보유 기술</h5>
+                           <c:forEach items="${employeeTech}" var="employeeTech">
                             <li class="nav-item">
-                                보유 기술1
+                                ${employeeTech}
                             </li>
-                            <li class="nav-item">
-                                보유 기술2
-                            </li>
+                            </c:forEach>
                         </ul>
                     </div>
-                    <div class="row p-3">
-                        <div class="col-sm-6 b-3 p-3">
+                    <c:choose>
+                        <c:when test="${principal.role eq 'company'}">
+                        <div class="row p-3">
+                            <div class="col-sm-6 b-3 p-3">
+                            </div>
+                            <div class="col-sm-2 b-3 p-3">
+                            </div>
+                            <div class="col-sm-2 ">
+                                <button type="button" class="col-12 btn btn-outline-info">채용</button>
+                            </div>
+                            <div class=" col-sm-2 ">
+                                <button type="button" class="col-12 btn btn-outline-danger">비채용</button>
+                            </div>
                         </div>
-                        <div class="col-sm-2 b-3 p-3">
-                        </div>
-                        <div class="col-sm-2 ">
-                            <button type="button" class="col-12 btn btn-outline-info">채용</button>
-                        </div>
-                        <div class=" col-sm-2 ">
-                            <button type="button" class="col-12 btn btn-outline-danger">비채용</button>
-                        </div>
-                    </div>
+                        </c:when>
+                        <c:otherwise>
+                        </c:otherwise>
+                        </c:choose>
                 </div>
             </div>
         </div>

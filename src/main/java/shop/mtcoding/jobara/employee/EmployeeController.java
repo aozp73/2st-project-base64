@@ -67,8 +67,12 @@ public class EmployeeController {
 
     @GetMapping("/employee/{id}")
     public String employeeDetail(@PathVariable int id, Model model) {
+        UserVo principal = (UserVo) session.getAttribute("principal");
         EmployeeAndResumeRespDto employeePS = employeeService.getEmployee(id);
+        List<String> employeeTechPS = employeeService.getEmployeeTech(id);
         model.addAttribute("employee", employeePS);
+        model.addAttribute("employeeTech", employeeTechPS);
+        model.addAttribute("principal", principal);
         return "employee/detail";
     }
 
