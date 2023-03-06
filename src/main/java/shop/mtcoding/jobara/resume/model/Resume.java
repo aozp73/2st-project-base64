@@ -17,11 +17,19 @@ public class Resume {
     private String content;
     private Timestamp createdAt;
 
-    public String getPreview() {
-        if (content.length() > 20) {
-            return content.substring(0, 20) + "...";
-        } else {
+    public String getContentPreview() {
+        if (content.length() < 20) {
             return content;
+        } else {
+            return content.substring(0, 20);
+        }
+    }
+
+    public String getTitlePreview() {
+        if (content.length() < 20) {
+            return title;
+        } else {
+            return title.substring(0, 20) + "...";
         }
     }
 

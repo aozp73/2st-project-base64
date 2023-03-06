@@ -36,8 +36,8 @@ public class ApplyResp {
         }
 
         public String getPreview() {
-            if (title.length() > 20) {
-                return title.substring(0, 20) + "...";
+            if (title.length() > 30) {
+                return title.substring(0, 30) + "...";
             } else {
                 return title;
             }
@@ -71,7 +71,7 @@ public class ApplyResp {
             }
         }
 
-        public String getBoardPreview() {
+        public String getBoardTitlePreview() {
             if (boardTitle.length() > 20) {
                 return boardTitle.substring(0, 20) + "...";
             } else {
@@ -79,7 +79,7 @@ public class ApplyResp {
             }
         }
 
-        public String getResumePreview() {
+        public String getResumeTitlePreview() {
             if (resumeTitle.length() > 20) {
                 return resumeTitle.substring(0, 20) + "...";
             } else {
