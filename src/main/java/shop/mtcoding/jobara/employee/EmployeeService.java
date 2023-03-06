@@ -69,6 +69,11 @@ public class EmployeeService {
         return employeePS;
     }
 
+    public EmployeeAndResumeRespDto getEmployee(int id, int resumeId) {
+        EmployeeAndResumeRespDto employeePS = employeeRepository.findEmployeeByIdAndResume(id, resumeId);
+        return employeePS;
+    }
+
     public UserVo getEmployee(EmployeeLoginReqDto employeeLoginReqDto) {
         UserVo userVo = userRepository.findByUsernameAndPassword(
                 new User(employeeLoginReqDto.getUsername(), employeeLoginReqDto.getPassword()));

@@ -69,6 +69,21 @@
                 )
     </select>
 
+    <select id="findEmployeeByIdAndResume" resultType="shop.mtcoding.jobara.employee.dto.EmployeeResp$EmployeeAndResumeRespDto">
+         SELECT user_tb.*, employee_tb.real_name, education, career, title, content
+        FROM user_tb
+        JOIN employee_tb ON user_tb.id = employee_tb.user_id
+        JOIN resume_tb ON employee_tb.user_id = resume_tb.user_id
+
+        WHERE (resume_tb.user_id, resume_tb.id) IN (
+
+                SELECT employee_tb.user_id, #{resumeId}
+                FROM employee_tb
+                JOIN resume_tb ON employee_tb.user_id = resume_tb.user_id and employee_tb.user_id = #{id}
+                GROUP BY employee_tb.user_id
+                )
+    </select>
+
     <select id="findRecommendWithResume" resultType="shop.mtcoding.jobara.employee.dto.EmployeeResp$EmployeeAndResumeRespDto">
         select user_tb.*, real_name, education, career, title, content
         from user_tb, employee_tb, resume_tb

@@ -15,6 +15,8 @@ public interface EmployeeRepository {
 
     public EmployeeAndResumeRespDto findEmployeeByIdWithResume(int id);
 
+    public EmployeeAndResumeRespDto findEmployeeByIdAndResume(@Param("id") int id, @Param("resumeId") int resumeId);
+
     public EmployeeAndResumeRespDto findRecommendWithResume(int id);
 
     public List<Integer> findRecommendId(int id);
