@@ -74,9 +74,11 @@ public class ResumeController {
     @PostMapping("/resume/save")
     public ResponseEntity<?> saveResume(@RequestBody ResumeSaveReq resumeSaveReq) {
         UserVo principal = (UserVo) session.getAttribute("principal");
-        Verify.validateApiObject(principal, "로그인이 필요합니다.");
-        Verify.checkRoleApi(principal, "employee");
-        if (resumeSaveReq.getTitle() == null) {
+        Verify.validateObject(principal, "로그인이 필요합니다.");
+        if (!principal.getRole().equals("employee")) {
+            throw new CustomException("권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
+        if (resumeSaveReq.getTitle().isEmpty()) {
             resumeSaveReq.setTitle("무제");
         }
         resumeService.saveResume(principal.getId(), resumeSaveReq);

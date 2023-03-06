@@ -31,7 +31,7 @@
                                         style="width: 100%; display: block;">${apply.realName}</a></td>
                                 <td class="my-text-ellipsis"><a href="/board/${apply.boardId}"
                                         class="no_under_line_link" style="width: 100%; display: block;">
-                                        ${apply.title}</a></td>
+                                        ${apply.preview}</a></td>
                                 <td class="my-text-ellipsis text-center">${apply.stateToString}</td>
                                 <td class="text-center my-text-ellipsis">${apply.createdAtToString}</td>
                                 <td><button type="button" class="badge bg-success my-border-color-default"

@@ -18,7 +18,7 @@
                                           <c:forEach items="${resumeList}" var="resume">
                                                 <tr>
                                                       <td><a href="/resume/${resume.id}">${resume.title}</a></td>
-                                                      <td>${resume.content}</td>
+                                                      <td>${resume.preview}</td>
                                                       <td>${resume.createdAtToString}</td>
                                                       <td><button type="button" class="badge bg-danger my-border-color-warning" onclick="deleteResume(${resume.id})">삭제</span></td>
                                                 </tr>
