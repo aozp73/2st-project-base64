@@ -5,13 +5,11 @@
 
         <form action="/board/save" method="post">
 
-            <div class="container py-3 bg-white">
+            <div class="container py-3 px-3">
                 <div class="justify-content-center d-flex my-3 py-3">
-                <hr>
                     <h2>
                         기업 공고 등록
                     </h2>
-                <hr>
                 </div>
 
                 <div class="my-border-color-default px-3 py-3" style="width: 100%; ">
@@ -79,7 +77,7 @@
 
                             <div>
 
-                                <div class="ms-1 ps-1" style="display: grid; grid-template-columns: 2.7fr 7.3fr;">
+                                <div class="ms-1 ps-2" style="display: grid; grid-template-columns: 3.5fr 7.3fr;">
 
                                     <div class="mt-1">
                                         <div>근무형태</div>
@@ -88,7 +86,7 @@
                                     <div class="mt-1">
                                         <div>
                                             <select name="jobTypeString" class="career my-border-color-default"
-                                                style="width: 80%;">
+                                                style="width: 85%;">
                                                 <option>근무형태</option>
                                                 <option>인턴</option>
                                                 <option>정규직</option>
@@ -112,7 +110,7 @@
 
                                         <div>
                                             <div class="Deadline">
-                                                <input type="date"
+                                                <input type="date" name="deadline";
                                                     class="form-control text-primary my-border-color-default"
                                                     style="width:90%" id="Deadline">
                                             </div>
