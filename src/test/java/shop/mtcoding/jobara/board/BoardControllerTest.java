@@ -98,6 +98,10 @@ public class BoardControllerTest {
         boardUpdateReqDto.setEducationString("4년 대졸이상");
         boardUpdateReqDto.setJobTypeString("정규직");
         boardUpdateReqDto.setFavor("관련 프로젝트 경험");
+        // boardUpdateReqDto.setDeadline("2023-03-05");
+        // boardUpdateReqDto.setDeadline("2023-12-01");
+        // 테스트일자 03-06 -> 1~100일 이내 마감일자 안내구문 테스트 완료
+        boardUpdateReqDto.setDeadline("2023-05-21");
         ArrayList<Integer> arrayList = new ArrayList<>(Arrays.asList(1, 3, 5, 7));
         boardUpdateReqDto.setCheckedValues(arrayList);
 
@@ -135,18 +139,22 @@ public class BoardControllerTest {
 
         // then
         resultActions.andExpect(status().isOk());
-        assertThat(boardDto.getCareerString()).isNotEqualTo("3년이상 ~ 5년미만");
+        assertThat(boardDto.getCareerString()).isEqualTo("3년이상 ~ 5년미만");
     }
 
     @Test
     public void save_test() throws Exception {
         // given
         String requestBody = "title=테스트제목&content=테스트내용&careerString=1년이상 ~ 3년미만&educationString=4년 대졸이상&jobTypeString=정규직&favor=관련프로젝트 경험&userId=6&checkLang=2&checkLang=4&checkLang=6";
+        String deadline = "&deadline=2023-05-13";
+        // String deadline = "&deadline=2023-03-01";
+        // String deadline = "&deadline=2023-12-01";
+        // 테스트일자 03-06 -> 1~100일 이내 마감일자 안내구문 테스트 완료
 
         // when
         ResultActions resultActions = mvc.perform(
                 post("/board/save")
-                        .content(requestBody)
+                        .content(requestBody + deadline)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                         .session(mockSession));
 
@@ -157,6 +165,8 @@ public class BoardControllerTest {
     @Test
     public void saveForm_test() throws Exception {
         // given
+        // board saveForm 들어가기 위해선 기업회원이어야 함
+        // 구직회원이 시도할 경우 안내문구 출력 테스트 완료
 
         // when
         ResultActions resultActions = mvc.perform(
@@ -167,7 +177,7 @@ public class BoardControllerTest {
         UserVo principal = (UserVo) session.getAttribute("principal");
 
         // then
-        assertThat(principal.getUsername()).isNotEqualTo("cos");
+        assertThat(principal.getUsername()).isEqualTo("cos");
         resultActions.andExpect(status().isOk());
     }
 
@@ -193,7 +203,7 @@ public class BoardControllerTest {
 
         // then
         // assertThat(coPrincipal.getUsername()).isNotEqualTo("ssar");
-        assertThat(coPrincipal.getUsername()).isNotEqualTo("cos");
+        assertThat(coPrincipal.getUsername()).isEqualTo("cos");
         resultActions.andExpect(status().isOk());
     }
 
@@ -214,8 +224,8 @@ public class BoardControllerTest {
 
         // then
         resultActions.andExpect(status().isOk());
-        assertThat(board.getCompanyScale()).isNotEqualTo("대기업");
-        assertThat(board.getCompanyField()).isNotEqualTo("IT업");
+        assertThat(board.getCompanyScale()).isEqualTo("대기업");
+        assertThat(board.getCompanyField()).isEqualTo("IT업");
     }
 
     @Test
@@ -239,7 +249,7 @@ public class BoardControllerTest {
 
         // then
         // resultActions.andExpect(status().isOk());
-        assertThat(boardList.getBoardListDtos().size()).isNotEqualTo(1);
+        assertThat(boardList.getBoardListDtos().size()).isEqualTo(1);
     }
 
     @Test
@@ -258,7 +268,7 @@ public class BoardControllerTest {
 
         // then
         resultActions.andExpect(status().isOk());
-        assertThat(boardList.get(0).getTitle()).isNotEqualTo("공고제목1");
-        assertThat(boardList.get(1).getTitle()).isNotEqualTo("공고제목2");
+        assertThat(boardList.get(0).getTitle()).isEqualTo("공고제목1");
+        assertThat(boardList.get(1).getTitle()).isEqualTo("공고제목2");
     }
 }
