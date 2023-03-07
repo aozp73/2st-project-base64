@@ -61,7 +61,7 @@ public class BoardRepositoryTest {
 
         // then
         assertThat(pagingDto.getCurrentPage()).isEqualTo(1);
-        assertThat(pagingDto.getTotalCount()).isEqualTo(17);
+        assertThat(pagingDto.getTotalCount()).isEqualTo(9);
         // assertThat(pagingDto.getTotalCount()).isNotEqualTo(1);
         // assertThat(pagingDto.getTotalCount()).isNotEqualTo(3);
     }
@@ -102,7 +102,7 @@ public class BoardRepositoryTest {
         // System.out.println("테스트 : " + responseBody);
 
         // then
-        assertThat(myBoardListRespDto.get(1).getTitle()).isEqualTo("공고제목3");
+        assertThat(myBoardListRespDto.get(1).getTitle()).isEqualTo("인공지능 솔루션 (AI Solution) 개발");
     }
 
     @Test
