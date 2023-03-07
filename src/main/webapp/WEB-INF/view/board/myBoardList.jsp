@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
     <%@ include file="../layout/header.jsp" %>
-<div style="height: 100px;"></div>
-            <div class="container py-3 bg-white">
+        <div style="height: 100px;"></div>
+        <div class="container py-3 bg-white">
             <div class="p-3">
                 <hr>
                 <h2 style="text-align: center;">나의 공고 목록</h2>
@@ -20,10 +20,10 @@
                                 <div id="boardImage-${board.id}" class="card col-lg-12"
                                     onmouseenter="mouseEnterImages(this)" onmouseleave="mouseLeaveImages(this)">
                                     <div class="d-flex justify-content-center">
-                                    <img class="card-img-top" style="height: 100px; max-width: 200px;" src="${board.profile == null ? " /images/defaultProfile.png" :
-                                            board.profile}"
-                                        alt="Card image">
-                                        </div>
+                                        <img class="card-img-top" style="height: 100px; max-width: 200px;"
+                                            src="${board.profile == null ? " /images/defaultProfile.png" :
+                                            board.profile}" alt="Card image">
+                                    </div>
                                     <div class="card-body">
                                         <div class="my-text-ellipsis">
                                             <h5>${board.companyName}</h5>
@@ -37,11 +37,19 @@
                                     </div>
                             </a>
                             <div class="card-footer d-flex justify-content-between">
-                                <div>(D-${board.dday == 0 ? 'Day' : board.dday})</div>
+                                <c:choose>
+                                    <c:when test="${board.dday < 0}">
+                                        <div style="color: crimson;">(지원 마감)</div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div>(D-${board.dday == 0 ? 'Day' : board.dday})</div>
+                                    </c:otherwise>
+                                </c:choose>
                                 <div>
                                     <button type="button" class="btn btn-primary"
                                         onclick="location.href='/board/updateForm/${board.id}'">수정</button>
-                                    <button type="button" class="btn btn-secondary" onclick="deleteBoard(`${board.id}`)">삭제</button>
+                                    <button type="button" class="btn btn-secondary"
+                                        onclick="deleteBoard(`${board.id}`)">삭제</button>
                                 </div>
                             </div>
                         </div>
@@ -51,8 +59,7 @@
 
 
             </div>
-            <div class="row d-flex justify-content-center mt-5"
-                style="margin-bottom: 60px;">
+            <div class="row d-flex justify-content-center mt-5" style="margin-bottom: 60px;">
 
                 <div class="col-md-4"></div>
 
@@ -68,11 +75,12 @@
                             <li class="page-item"><a class="page-link" href="#">6</a></li>
                             <li class="page-item"><a class="page-link" href="#">Next</a></li>
                         </ul>
-                    </nav> --%>
+                        </nav> --%>
                 </div>
 
                 <div class="col-md-4 d-flex justify-content-end">
-                    <a class="btn btn-secondary" href="/board/saveForm" style="position: relative; bottom: 13px; right:20px;">공고
+                    <a class="btn btn-secondary" href="/board/saveForm"
+                        style="position: relative; bottom: 13px; right:20px;">공고
                         등록</a>
                 </div>
 
@@ -86,18 +94,18 @@
 
 
         <script>
-            function deleteBoard(boardId){
-                let targetBoard = "targetBoard-"+boardId
+            function deleteBoard(boardId) {
+                let targetBoard = "targetBoard-" + boardId
 
                 $.ajax({
                     type: "delete",
-                    url: "/board/"+boardId,
+                    url: "/board/" + boardId,
                     dataType: "json"
                 }).done((res) => {
                     // alert(res.msg);
-                    $("#"+targetBoard).remove();
+                    $("#" + targetBoard).remove();
                     boardCheck()
-                }).fail((err)=>{
+                }).fail((err) => {
                     alert(err.responseJSON.msg);
                 });
             }
