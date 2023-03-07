@@ -2,8 +2,6 @@ package shop.mtcoding.jobara.employee;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +19,8 @@ import shop.mtcoding.jobara.common.aop.EmployeeCheck;
 import shop.mtcoding.jobara.common.aop.EmployeeCheckApi;
 import shop.mtcoding.jobara.common.dto.ResponseDto;
 import shop.mtcoding.jobara.common.ex.CustomException;
+import shop.mtcoding.jobara.common.util.RedisService;
+import shop.mtcoding.jobara.common.util.RedisServiceSet;
 import shop.mtcoding.jobara.common.util.Verify;
 import shop.mtcoding.jobara.employee.dto.EmployeeReq.EmployeeJoinReqDto;
 import shop.mtcoding.jobara.employee.dto.EmployeeReq.EmployeeTechUpdateReqDto;
@@ -36,7 +36,10 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @Autowired
-    private HttpSession session;
+    private RedisService redisService;
+
+    @Autowired
+    private RedisServiceSet redisServiceSet;
 
     @GetMapping("/employee/joinForm")
     public String joinForm() {
@@ -50,10 +53,9 @@ public class EmployeeController {
 
     @GetMapping("/employee/list")
     public String employeeList(Model model, Integer page) {
-        UserVo principal = (UserVo) session.getAttribute("principal");
+        UserVo principal = redisService.getValue("principal");
         PagingDto pagingPS = employeeService.getEmployee(page);
         model.addAttribute("pagingDto", pagingPS);
-        model.addAttribute("principal", principal);
         System.out.println("테스트 : " + pagingPS.getResumeListDtos().get(0).getProfile());
         if (principal != null) {
             if (principal.getRole().equals("company")) {
@@ -62,43 +64,39 @@ public class EmployeeController {
                 model.addAttribute("recommendEmployeeList", recommendEmployeeListPS);
             }
         }
-
+        redisServiceSet.addModel(model);
         return "employee/list";
     }
 
     @GetMapping("/employee/{id}")
     public String employeeDetail(@PathVariable int id, Model model) {
-        UserVo principal = (UserVo) session.getAttribute("principal");
         EmployeeAndResumeRespDto employeePS = employeeService.getEmployee(id);
         List<String> employeeTechPS = employeeService.getEmployeeTech(id);
         model.addAttribute("employee", employeePS);
         model.addAttribute("employeeTech", employeeTechPS);
-        model.addAttribute("principal", principal);
+        redisServiceSet.addModel(model);
         return "employee/detail";
     }
 
     @GetMapping("/employee/{id}/resume/{resumeId}")
     public String employeeDetail(@PathVariable int id, @PathVariable int resumeId, Model model) {
-        UserVo principal = (UserVo) session.getAttribute("principal");
         EmployeeAndResumeRespDto employeePS = employeeService.getEmployee(id, resumeId);
         List<String> employeeTechPS = employeeService.getEmployeeTech(id);
         model.addAttribute("employee", employeePS);
         model.addAttribute("employeeTech", employeeTechPS);
-        model.addAttribute("principal", principal);
+        redisServiceSet.addModel(model);
         return "employee/detail";
     }
 
     @GetMapping("/employee/updateForm")
     @EmployeeCheck
     public String updateForm(Model model) {
-        UserVo principal = (UserVo) session.getAttribute("principal");
-        // Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED,
-        // "/#login");
-        // Verify.checkRole(principal, "employee");
+        UserVo principal = redisService.getValue("principal");
         EmployeeUpdateRespDto employeeUpdateRespDto = employeeService.getEmployeeUpdateRespDto(principal.getId());
         List<Integer> employeeSkill = employeeService.getSkillForDetail(principal.getId());
         model.addAttribute("employeeDto", employeeUpdateRespDto);
         model.addAttribute("employeeSkill", employeeSkill);
+        redisServiceSet.addModel(model);
         return "employee/updateForm";
     }
 
@@ -114,10 +112,7 @@ public class EmployeeController {
     @PostMapping("/employee/update/{id}")
     @EmployeeCheck
     public String update(EmployeeUpdateReqDto employeeUpdateReqDto, MultipartFile profile) {
-        UserVo principal = (UserVo) session.getAttribute("principal");
-        // Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED,
-        // "/#login");
-        // Verify.checkRole(principal, "employee");
+        UserVo principal = redisService.getValue("principal");
         Verify.validateString(employeeUpdateReqDto.getPassword(), "암호를 입력하세요.");
         Verify.validateString(employeeUpdateReqDto.getEmail(), "이메일을 입력하세요.");
         Verify.validateString(employeeUpdateReqDto.getAddress(), "주소를 입력하세요.");
@@ -134,8 +129,7 @@ public class EmployeeController {
         }
 
         UserVo UserVoPS = employeeService.updateEmpolyee(employeeUpdateReqDto, principal.getId(), profile);
-        session.removeAttribute("principal");
-        session.setAttribute("principal", UserVoPS);
+        redisService.setValue("principal", UserVoPS);
         return "redirect:/";
     }
 
@@ -143,9 +137,7 @@ public class EmployeeController {
     @EmployeeCheckApi
     public ResponseEntity<?> update(@PathVariable int id,
             @RequestBody EmployeeTechUpdateReqDto employeeTechUpdateReqDto) {
-        UserVo principal = (UserVo) session.getAttribute("principal");
-        // Verify.validateApiObject(principal, "로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
-        // Verify.checkRoleApi(principal, "employee");
+        UserVo principal = redisService.getValue("principal");
         if (employeeTechUpdateReqDto.getCheckedValues() != null) {
             employeeService.updateEmpolyeeTech(employeeTechUpdateReqDto.getCheckedValues(), principal.getId());
         }

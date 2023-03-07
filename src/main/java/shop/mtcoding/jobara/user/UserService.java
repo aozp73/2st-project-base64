@@ -1,11 +1,9 @@
 package shop.mtcoding.jobara.user;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import shop.mtcoding.jobara.common.ex.CustomException;
 import shop.mtcoding.jobara.common.util.Hash;
 import shop.mtcoding.jobara.common.util.Verify;
 import shop.mtcoding.jobara.user.dto.UserReq.UserLoginReqDto;

@@ -1,9 +1,6 @@
 package shop.mtcoding.jobara.company;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.RequiredArgsConstructor;
 import shop.mtcoding.jobara.common.aop.CompanyCheck;
 import shop.mtcoding.jobara.common.ex.CustomException;
+import shop.mtcoding.jobara.common.util.RedisService;
+import shop.mtcoding.jobara.common.util.RedisServiceSet;
 import shop.mtcoding.jobara.common.util.Verify;
 import shop.mtcoding.jobara.company.dto.CompanyReq.CompanyJoinReqDto;
 import shop.mtcoding.jobara.company.dto.CompanyReq.CompanyUpdateReqDto;
@@ -27,7 +26,10 @@ public class CompanyConetroller {
     private CompanyService companyService;
 
     @Autowired
-    private HttpSession session;
+    private RedisService redisService;
+
+    @Autowired
+    private RedisServiceSet redisServiceSet;
 
     @GetMapping("/company/joinForm")
     public String joinForm() {
@@ -37,12 +39,10 @@ public class CompanyConetroller {
     @GetMapping("/company/updateForm")
     @CompanyCheck
     public String updateForm(Model model) {
-        UserVo principal = (UserVo) session.getAttribute("principal");
-        // Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED,
-        // "/#login");
-        // Verify.checkRole(principal, "company");
+        UserVo principal = redisService.getValue("principal");
         CompanyUpdateRespDto companyUpdateRespDto = companyService.getCompanyUpdateRespDto(principal.getId());
         model.addAttribute("companyDto", companyUpdateRespDto);
+        redisServiceSet.addModel(model);
         return "company/updateForm";
     }
 
@@ -59,10 +59,7 @@ public class CompanyConetroller {
     @CompanyCheck
     public String update(CompanyUpdateReqDto companyUpdateReqDto, MultipartFile profile) {
 
-        UserVo principal = (UserVo) session.getAttribute("principal");
-        // Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED,
-        // "/#login");
-        // Verify.checkRole(principal, "company");
+        UserVo principal = redisService.getValue("principal");
 
         if (profile.isEmpty()) {
             throw new CustomException("사진이 전송되지 않았습니다");
@@ -79,8 +76,7 @@ public class CompanyConetroller {
         Verify.validateString(companyUpdateReqDto.getCompanyField(), "회사 업종란을 선택하세요.");
         Verify.validateString(companyUpdateReqDto.getTel(), "전화번호를 입력하세요.");
         UserVo UserVoPS = companyService.updateCompany(companyUpdateReqDto, principal.getId(), profile);
-        session.removeAttribute("principal");
-        session.setAttribute("principal", UserVoPS);
+        redisService.setValue("principal", UserVoPS);
         return "redirect:/";
     }
 }

@@ -32,6 +32,8 @@ import shop.mtcoding.jobara.common.dto.ResponseDto;
 import shop.mtcoding.jobara.common.ex.CustomApiException;
 import shop.mtcoding.jobara.common.ex.CustomException;
 import shop.mtcoding.jobara.common.util.DateParse;
+import shop.mtcoding.jobara.common.util.RedisService;
+import shop.mtcoding.jobara.common.util.RedisServiceSet;
 import shop.mtcoding.jobara.common.util.Verify;
 import shop.mtcoding.jobara.love.LoveService;
 import shop.mtcoding.jobara.love.dto.LoveResp.LoveDetailRespDto;
@@ -50,19 +52,26 @@ public class BoardController {
     @Autowired
     HttpSession session;
 
+    @Autowired
+    private RedisService redisService;
+
+    @Autowired
+    private RedisServiceSet redisServiceSet;
+
     @GetMapping({ "/", "/home" })
     public String home(Model model) {
 
         List<BoardMainRespDto> boardListPS = boardService.getListToMain();
         model.addAttribute("boardMainList", boardListPS);
-
+        // model.addAttribute("redisService", redisService);
+        redisServiceSet.addModel(model);
         return "board/home";
     }
 
     @GetMapping("/board/{id}")
     public String detail(@PathVariable int id, Model model) {
         BoardDetailRespDto boardPS = boardService.getDetail(id);
-        UserVo principal = (UserVo) session.getAttribute("principal");
+        UserVo principal = redisService.getValue("principal");
         if (principal != null) {
             List<Resume> resumeList = boardService.getResume(principal.getId());
             model.addAttribute("resumeList", resumeList);
@@ -76,65 +85,48 @@ public class BoardController {
         List<Integer> boardSkill = boardService.getSkillForDetail(id);
         model.addAttribute("boardSkill", boardSkill);
         model.addAttribute("board", boardPS);
-
+        redisServiceSet.addModel(model);
         return "board/detail";
     }
 
     @GetMapping("/board/list")
     public String list(Model model, Integer page, String keyword) {
-        UserVo principal = (UserVo) session.getAttribute("principal");
+        UserVo principal = redisService.getValue("principal");
         PagingDto pagingDto = boardService.getListWithPaging(page, keyword, principal);
         model.addAttribute("pagingDto", pagingDto);
-
+        redisServiceSet.addModel(model);
         return "board/list";
     }
 
     @GetMapping("/board/saveForm")
     @CompanyCheck
-    public String saveForm() {
-        // UserVo principal = (UserVo) session.getAttribute("principal");
-
-        // 인증체크
-        // Verify.validateObject(principal, "로그인이 필요한 페이지입니다.", HttpStatus.BAD_REQUEST,
-        // "/loginForm");
-        // Verify.checkRole(principal, "company");
-
+    public String saveForm(Model model) {
+        redisServiceSet.addModel(model);
         return "board/saveForm";
     }
 
     @GetMapping("/board/updateForm/{id}")
     @CompanyCheck
     public String updateForm(Model model, @PathVariable int id) {
-
-        UserVo principal = (UserVo) session.getAttribute("principal");
-
-        // 인증체크
-        // Verify.validateObject(
-        // principal, "로그인이 필요한 페이지입니다", HttpStatus.BAD_REQUEST,
-        // "/loginForm");
-        // Verify.checkRole(principal, "company");
+        UserVo principal = redisService.getValue("principal");
 
         List<Integer> boardSkill = boardService.getSkillForDetail(id);
 
         BoardUpdateRespDto boardDetailPS = boardService.getDetailForUpdate(id, principal.getId());
         model.addAttribute("boardDetail", boardDetailPS);
         model.addAttribute("boardSkill", boardSkill);
-
+        redisServiceSet.addModel(model);
         System.out.println("테스트 : " + boardDetailPS.getTitle());
+
         return "board/updateForm";
     }
 
     @PutMapping("/board/update/{id}")
     @CompanyCheckApi
     public ResponseEntity<?> update(@PathVariable int id, @RequestBody BoardUpdateReqDto boardUpdateReqDto) {
-        UserVo principal = (UserVo) session.getAttribute("principal");
-        // 인증체크
-        // Verify.validateApiObject(
-        // principal, "로그인이 필요한 페이지입니다", HttpStatus.BAD_REQUEST);
-        // Verify.checkRoleApi(principal, "company");
+        UserVo principal = redisService.getValue("principal");
 
         // 유효성
-
         Verify.validateApiString(boardUpdateReqDto.getDeadline(), "마감 날짜를 선택하세요");
 
         ArrayList<Object> resDateParse = DateParse.Dday(boardUpdateReqDto.getDeadline());
@@ -164,13 +156,7 @@ public class BoardController {
     public String save(BoardInsertReqDto boardInsertReqDto,
             @RequestParam(required = false, defaultValue = "") ArrayList<Integer> checkLang) {
 
-        UserVo principal = (UserVo) session.getAttribute("principal");
-
-        // 인증체크
-        // Verify.validateObject(
-        // principal, "로그인이 필요한 페이지입니다", HttpStatus.BAD_REQUEST,
-        // "/loginForm");
-        // Verify.checkRole(principal, "company");
+        UserVo principal = redisService.getValue("principal");
 
         // 유효성
         Verify.validateString(boardInsertReqDto.getTitle(), "제목을 입력하세요");
@@ -203,25 +189,18 @@ public class BoardController {
     @CompanyCheck
     public String myBoardList(@PathVariable int id, Model model) {
 
-        UserVo principal = (UserVo) session.getAttribute("principal");
-
-        // 인증체크
-        // Verify.validateObject(
-        // principal, "로그인이 필요한 페이지입니다", HttpStatus.BAD_REQUEST,
-        // "/loginForm");
-
-        // Verify.checkRole(principal, "company");
+        UserVo principal = redisService.getValue("principal");
 
         List<MyBoardListRespDto> myBoardListPS = boardService.getMyBoard(principal.getId(), id);
         model.addAttribute("myBoardList", myBoardListPS);
-
+        redisServiceSet.addModel(model);
         return "board/myBoardList";
     }
 
     @GetMapping("/board/scrapList/{id}")
     public String myScrapBoardList(@PathVariable int id, Model model) {
 
-        UserVo principal = (UserVo) session.getAttribute("principal");
+        UserVo principal = redisService.getValue("principal");
 
         // 인증체크
         Verify.validateObject(
@@ -232,14 +211,14 @@ public class BoardController {
 
         List<MyScrapBoardListRespDto> myScrapBoardListPS = boardService.getMyScrapBoard(principal.getId(), id);
         model.addAttribute("myScrapBoardList", myScrapBoardListPS);
-
+        redisServiceSet.addModel(model);
         return "board/myScrapBoardList";
     }
 
     @DeleteMapping("/board/{id}")
     public ResponseEntity<?> delete(@PathVariable int id) {
 
-        UserVo principal = (UserVo) session.getAttribute("principal");
+        UserVo principal = redisService.getValue("principal");
         Verify.validateApiObject(
                 principal, "로그인이 필요한 페이지입니다", HttpStatus.BAD_REQUEST);
         Verify.checkRoleApi(principal, "company");
