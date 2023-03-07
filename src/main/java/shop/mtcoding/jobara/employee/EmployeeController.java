@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import shop.mtcoding.jobara.board.dto.BoardResp.PagingDto;
+import shop.mtcoding.jobara.common.aop.EmployeeCheck;
+import shop.mtcoding.jobara.common.aop.EmployeeCheckApi;
 import shop.mtcoding.jobara.common.dto.ResponseDto;
 import shop.mtcoding.jobara.common.ex.CustomException;
 import shop.mtcoding.jobara.common.util.Verify;
@@ -87,10 +89,12 @@ public class EmployeeController {
     }
 
     @GetMapping("/employee/updateForm")
+    @EmployeeCheck
     public String updateForm(Model model) {
         UserVo principal = (UserVo) session.getAttribute("principal");
-        Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED, "/#login");
-        Verify.checkRole(principal, "employee");
+        // Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED,
+        // "/#login");
+        // Verify.checkRole(principal, "employee");
         EmployeeUpdateRespDto employeeUpdateRespDto = employeeService.getEmployeeUpdateRespDto(principal.getId());
         List<Integer> employeeSkill = employeeService.getSkillForDetail(principal.getId());
         model.addAttribute("employeeDto", employeeUpdateRespDto);
@@ -108,10 +112,12 @@ public class EmployeeController {
     }
 
     @PostMapping("/employee/update/{id}")
+    @EmployeeCheck
     public String update(EmployeeUpdateReqDto employeeUpdateReqDto, MultipartFile profile) {
         UserVo principal = (UserVo) session.getAttribute("principal");
-        Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED, "/#login");
-        Verify.checkRole(principal, "employee");
+        // Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED,
+        // "/#login");
+        // Verify.checkRole(principal, "employee");
         Verify.validateString(employeeUpdateReqDto.getPassword(), "암호를 입력하세요.");
         Verify.validateString(employeeUpdateReqDto.getEmail(), "이메일을 입력하세요.");
         Verify.validateString(employeeUpdateReqDto.getAddress(), "주소를 입력하세요.");
@@ -134,11 +140,12 @@ public class EmployeeController {
     }
 
     @PutMapping("/employee/update/tech/{id}")
+    @EmployeeCheckApi
     public ResponseEntity<?> update(@PathVariable int id,
             @RequestBody EmployeeTechUpdateReqDto employeeTechUpdateReqDto) {
         UserVo principal = (UserVo) session.getAttribute("principal");
-        Verify.validateApiObject(principal, "로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
-        Verify.checkRoleApi(principal, "employee");
+        // Verify.validateApiObject(principal, "로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
+        // Verify.checkRoleApi(principal, "employee");
         if (employeeTechUpdateReqDto.getCheckedValues() != null) {
             employeeService.updateEmpolyeeTech(employeeTechUpdateReqDto.getCheckedValues(), principal.getId());
         }

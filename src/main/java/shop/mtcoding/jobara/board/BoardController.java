@@ -26,6 +26,8 @@ import shop.mtcoding.jobara.board.dto.BoardResp.BoardUpdateRespDto;
 import shop.mtcoding.jobara.board.dto.BoardResp.MyBoardListRespDto;
 import shop.mtcoding.jobara.board.dto.BoardResp.MyScrapBoardListRespDto;
 import shop.mtcoding.jobara.board.dto.BoardResp.PagingDto;
+import shop.mtcoding.jobara.common.aop.CompanyCheck;
+import shop.mtcoding.jobara.common.aop.CompanyCheckApi;
 import shop.mtcoding.jobara.common.dto.ResponseDto;
 import shop.mtcoding.jobara.common.ex.CustomApiException;
 import shop.mtcoding.jobara.common.ex.CustomException;
@@ -88,27 +90,29 @@ public class BoardController {
     }
 
     @GetMapping("/board/saveForm")
+    @CompanyCheck
     public String saveForm() {
-        UserVo principal = (UserVo) session.getAttribute("principal");
+        // UserVo principal = (UserVo) session.getAttribute("principal");
 
         // 인증체크
-        Verify.validateObject(principal, "로그인이 필요한 페이지입니다.", HttpStatus.BAD_REQUEST,
-                "/loginForm");
-        Verify.checkRole(principal, "company");
+        // Verify.validateObject(principal, "로그인이 필요한 페이지입니다.", HttpStatus.BAD_REQUEST,
+        // "/loginForm");
+        // Verify.checkRole(principal, "company");
 
         return "board/saveForm";
     }
 
     @GetMapping("/board/updateForm/{id}")
+    @CompanyCheck
     public String updateForm(Model model, @PathVariable int id) {
 
         UserVo principal = (UserVo) session.getAttribute("principal");
 
         // 인증체크
-        Verify.validateObject(
-                principal, "로그인이 필요한 페이지입니다", HttpStatus.BAD_REQUEST,
-                "/loginForm");
-        Verify.checkRole(principal, "company");
+        // Verify.validateObject(
+        // principal, "로그인이 필요한 페이지입니다", HttpStatus.BAD_REQUEST,
+        // "/loginForm");
+        // Verify.checkRole(principal, "company");
 
         List<Integer> boardSkill = boardService.getSkillForDetail(id);
 
@@ -121,12 +125,13 @@ public class BoardController {
     }
 
     @PutMapping("/board/update/{id}")
+    @CompanyCheckApi
     public ResponseEntity<?> update(@PathVariable int id, @RequestBody BoardUpdateReqDto boardUpdateReqDto) {
         UserVo principal = (UserVo) session.getAttribute("principal");
         // 인증체크
-        Verify.validateApiObject(
-                principal, "로그인이 필요한 페이지입니다", HttpStatus.BAD_REQUEST);
-        Verify.checkRoleApi(principal, "company");
+        // Verify.validateApiObject(
+        // principal, "로그인이 필요한 페이지입니다", HttpStatus.BAD_REQUEST);
+        // Verify.checkRoleApi(principal, "company");
 
         // 유효성
 
@@ -155,16 +160,17 @@ public class BoardController {
     }
 
     @PostMapping("/board/save")
+    @CompanyCheck
     public String save(BoardInsertReqDto boardInsertReqDto,
             @RequestParam(required = false, defaultValue = "") ArrayList<Integer> checkLang) {
 
         UserVo principal = (UserVo) session.getAttribute("principal");
 
         // 인증체크
-        Verify.validateObject(
-                principal, "로그인이 필요한 페이지입니다", HttpStatus.BAD_REQUEST,
-                "/loginForm");
-        Verify.checkRole(principal, "company");
+        // Verify.validateObject(
+        // principal, "로그인이 필요한 페이지입니다", HttpStatus.BAD_REQUEST,
+        // "/loginForm");
+        // Verify.checkRole(principal, "company");
 
         // 유효성
         Verify.validateString(boardInsertReqDto.getTitle(), "제목을 입력하세요");
@@ -194,16 +200,17 @@ public class BoardController {
     }
 
     @GetMapping("/board/boardList/{id}")
+    @CompanyCheck
     public String myBoardList(@PathVariable int id, Model model) {
 
         UserVo principal = (UserVo) session.getAttribute("principal");
 
         // 인증체크
-        Verify.validateObject(
-                principal, "로그인이 필요한 페이지입니다", HttpStatus.BAD_REQUEST,
-                "/loginForm");
+        // Verify.validateObject(
+        // principal, "로그인이 필요한 페이지입니다", HttpStatus.BAD_REQUEST,
+        // "/loginForm");
 
-        Verify.checkRole(principal, "company");
+        // Verify.checkRole(principal, "company");
 
         List<MyBoardListRespDto> myBoardListPS = boardService.getMyBoard(principal.getId(), id);
         model.addAttribute("myBoardList", myBoardListPS);

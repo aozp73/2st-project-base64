@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import shop.mtcoding.jobara.common.aop.EmployeeCheckApi;
 import shop.mtcoding.jobara.common.dto.ResponseDto;
 import shop.mtcoding.jobara.common.ex.CustomApiException;
 import shop.mtcoding.jobara.love.dto.LoveReq.LoveSaveReqDto;
@@ -26,16 +27,17 @@ public class LoveController {
     LoveService loveService;
 
     @PostMapping("/love")
+    @EmployeeCheckApi
     public ResponseEntity<?> save(@RequestBody LoveSaveReqDto loveSaveReqDto) {
         // 인증
         UserVo principal = (UserVo) session.getAttribute("principal");
 
-        if (principal == null) {
-            throw new CustomApiException("인증이 되지 않았습니다", HttpStatus.UNAUTHORIZED);
-        }
-        if (!principal.getRole().equals("employee")) {
-            throw new CustomApiException("구직 회원으로 로그인 해주세요", HttpStatus.UNAUTHORIZED);
-        }
+        // if (principal == null) {
+        // throw new CustomApiException("인증이 되지 않았습니다", HttpStatus.UNAUTHORIZED);
+        // }
+        // if (!principal.getRole().equals("employee")) {
+        // throw new CustomApiException("구직 회원으로 로그인 해주세요", HttpStatus.UNAUTHORIZED);
+        // }
         // 유효성 검사
         if (loveSaveReqDto.getBoardId() == null) {
             throw new CustomApiException("boardId를 전달해 주세요");
@@ -47,16 +49,17 @@ public class LoveController {
     }
 
     @DeleteMapping("/love/{id}")
+    @EmployeeCheckApi
     public ResponseEntity<?> cancel(@PathVariable Integer id) {
         // 인증
         UserVo principal = (UserVo) session.getAttribute("principal");
-        if (principal == null) {
-            throw new CustomApiException("인증이 되지 않았습니다", HttpStatus.UNAUTHORIZED);
-        }
+        // if (principal == null) {
+        // throw new CustomApiException("인증이 되지 않았습니다", HttpStatus.UNAUTHORIZED);
+        // }
 
-        if (!principal.getRole().equals("employee")) {
-            throw new CustomApiException("구직 회원으로 로그인 해주세요", HttpStatus.UNAUTHORIZED);
-        }
+        // if (!principal.getRole().equals("employee")) {
+        // throw new CustomApiException("구직 회원으로 로그인 해주세요", HttpStatus.UNAUTHORIZED);
+        // }
 
         loveService.deleteLove(id, principal.getId());
 

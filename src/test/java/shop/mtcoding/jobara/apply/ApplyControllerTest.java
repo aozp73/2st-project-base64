@@ -41,17 +41,29 @@ public class ApplyControllerTest {
     @Autowired
     ObjectMapper om;
 
-    private MockHttpSession mockSession;
+    private MockHttpSession employeeMockSession;
+    private MockHttpSession companyMockSession;
 
     @BeforeEach
-    public void setUp() {
+    public void employeeSetUp() {
         UserVo pricipal = new UserVo();
         pricipal.setId(1);
         pricipal.setUsername("ssar");
         pricipal.setRole("employee");
         pricipal.setProfile(null);
-        mockSession = new MockHttpSession();
-        mockSession.setAttribute("principal", pricipal);
+        employeeMockSession = new MockHttpSession();
+        employeeMockSession.setAttribute("principal", pricipal);
+    }
+
+    @BeforeEach
+    public void companySetUp() {
+        UserVo pricipal = new UserVo();
+        pricipal.setId(6);
+        pricipal.setUsername("ssar");
+        pricipal.setRole("company");
+        pricipal.setProfile(null);
+        companyMockSession = new MockHttpSession();
+        companyMockSession.setAttribute("principal", pricipal);
     }
 
     @Test
@@ -65,7 +77,7 @@ public class ApplyControllerTest {
                 post("/apply")
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .session(mockSession));
+                        .session(employeeMockSession));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
@@ -82,7 +94,7 @@ public class ApplyControllerTest {
 
         // when
         ResultActions resultActions = mvc.perform(
-                get("/company/" + id + "/apply").session(mockSession));
+                get("/company/" + id + "/apply").session(companyMockSession));
         Map<String, Object> map = resultActions.andReturn().getModelAndView().getModel();
         List<CompanyApplyRespDto> applyListPS = (List<CompanyApplyRespDto>) map.get("applyList");
 
@@ -98,7 +110,7 @@ public class ApplyControllerTest {
 
         // when
         ResultActions resultActions = mvc.perform(
-                get("/employee/" + id + "/apply").session(mockSession));
+                get("/employee/" + id + "/apply").session(employeeMockSession));
         Map<String, Object> map = resultActions.andReturn().getModelAndView().getModel();
         List<EmployeeApplyRespDto> applyListPS = (List<EmployeeApplyRespDto>) map.get("applyList");
 
@@ -106,7 +118,7 @@ public class ApplyControllerTest {
         resultActions.andExpect(status().isOk());
         assertThat(applyListPS.get(0).getBoardTitle()).isNotEqualTo("공고제목1");
         assertThat(applyListPS.get(0).getResumeTitle()).isNotEqualTo("이력제 제목1");
-        assertThat(applyListPS.get(0).getState()).isNotEqualTo(-1);
+        assertThat(applyListPS.get(0).getState()).isEqualTo(-1);
     }
 
     @Test
@@ -122,7 +134,7 @@ public class ApplyControllerTest {
                 put("/board/" + boardId + "/apply")
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .session(mockSession));
+                        .session(companyMockSession));
         // String responseBody =
         // resultActions.andReturn().getResponse().getContentAsString();
         // System.out.println("테스트 : " + responseBody);

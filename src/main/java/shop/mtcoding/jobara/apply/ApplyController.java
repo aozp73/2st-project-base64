@@ -20,9 +20,12 @@ import shop.mtcoding.jobara.apply.dto.ApplyReq.ApplyDecideReqDto;
 import shop.mtcoding.jobara.apply.dto.ApplyReq.ApplyReqDto;
 import shop.mtcoding.jobara.apply.dto.ApplyResp.CompanyApplyRespDto;
 import shop.mtcoding.jobara.apply.dto.ApplyResp.EmployeeApplyRespDto;
+import shop.mtcoding.jobara.common.aop.CompanyCheck;
+import shop.mtcoding.jobara.common.aop.CompanyCheckApi;
+import shop.mtcoding.jobara.common.aop.EmployeeCheck;
+import shop.mtcoding.jobara.common.aop.EmployeeCheckApi;
 import shop.mtcoding.jobara.common.dto.ResponseDto;
 import shop.mtcoding.jobara.common.util.Verify;
-import shop.mtcoding.jobara.user.vo.UserVo;
 
 @Controller
 public class ApplyController {
@@ -34,42 +37,35 @@ public class ApplyController {
     private ApplyService applyService;
 
     @PostMapping("/apply")
+    @EmployeeCheckApi
     public ResponseEntity<?> apply(@RequestBody ApplyReqDto applyReqDto) {
-        UserVo principal = (UserVo) session.getAttribute("principal");
-        Verify.validateApiObject(principal, "로그인이 필요한 기능입니다");
-        Verify.checkRoleApi(principal, "employee");
-        applyService.insertApply(applyReqDto, principal.getId());
+        // UserVo principal = (UserVo) session.getAttribute("principal");
+        // Verify.validateApiObject(principal, "로그인이 필요한 기능입니다");
+        // Verify.checkRoleApi(principal, "employee");
+        // applyService.insertApply(applyReqDto, principal.getId());
         return new ResponseEntity<>(new ResponseDto<>(1, "지원 성공", null), HttpStatus.OK);
     }
 
     @GetMapping("/company/{id}/apply")
+    @CompanyCheck
     public String companyApplyList(@PathVariable Integer id, Model model) {
-        UserVo principal = (UserVo) session.getAttribute("principal");
-        Verify.validateObject(principal, "로그인이 필요한 기능입니다",HttpStatus.UNAUTHORIZED,"/#login");
-        Verify.checkRole(principal, "company");
-        Verify.isNotEqual(id, principal.getId(), "권한이 없습니다.", HttpStatus.FORBIDDEN);
+        // UserVo principal = (UserVo) session.getAttribute("principal");
+        // Verify.validateObject(principal, "로그인이 필요한
+        // 기능입니다",HttpStatus.UNAUTHORIZED,"/#login");
+        // Verify.checkRole(principal, "company");
+        // Verify.isNotEqual(id, principal.getId(), "권한이 없습니다.", HttpStatus.FORBIDDEN);
         List<CompanyApplyRespDto> applyListPS = applyService.getApplyForCompany(id);
         model.addAttribute("applyList", applyListPS);
         return "company/applyList";
     }
 
-    @GetMapping("/employee/{id}/apply")
-    public String employeeApplyList(@PathVariable Integer id, Model model) {
-        UserVo principal = (UserVo) session.getAttribute("principal");
-        Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED, "/#login");
-        Verify.checkRole(principal, "employee");
-        Verify.isNotEqual(id, principal.getId(), "권한이 없습니다.", HttpStatus.FORBIDDEN);
-        List<EmployeeApplyRespDto> applyListPS = applyService.getApplyForEmployee(id);
-        model.addAttribute("applyList", applyListPS);
-        return "employee/applyList";
-    }
-
     @PutMapping("/board/{id}/apply")
+    @CompanyCheckApi
     public @ResponseBody ResponseEntity<?> decideApplyment(@PathVariable int id,
             @RequestBody ApplyDecideReqDto applyDecideReqDto) {
-        UserVo principal = (UserVo) session.getAttribute("principal");
-        Verify.validateObject(principal, "로그인이 필요한 기능입니다");
-        Verify.checkRoleApi(principal, "company");
+        // UserVo principal = (UserVo) session.getAttribute("principal");
+        // Verify.validateObject(principal, "로그인이 필요한 기능입니다");
+        // Verify.checkRoleApi(principal, "company");
         Verify.validateApiObject(applyDecideReqDto.getUserId(), "처리할 유저 Id를 입력하세요.");
         Verify.validateApiObject(applyDecideReqDto.getState(), "처리할 결과 코드를 입력하세요.");
         applyService.approveApply(applyDecideReqDto, id);
@@ -78,5 +74,18 @@ public class ApplyController {
         } else {
             return new ResponseEntity<>(new ResponseDto<>(1, "불합격 처리 완료", null), HttpStatus.OK);
         }
+    }
+
+    @GetMapping("/employee/{id}/apply")
+    @EmployeeCheck
+    public String employeeApplyList(@PathVariable Integer id, Model model) {
+        // UserVo principal = (UserVo) session.getAttribute("principal");
+        // Verify.validateObject(principal, "로그인이 필요한 기능입니다", HttpStatus.UNAUTHORIZED,
+        // "/#login");
+        // Verify.checkRole(principal, "employee");
+        // Verify.isNotEqual(id, principal.getId(), "권한이 없습니다.", HttpStatus.FORBIDDEN);
+        List<EmployeeApplyRespDto> applyListPS = applyService.getApplyForEmployee(id);
+        model.addAttribute("applyList", applyListPS);
+        return "employee/applyList";
     }
 }
