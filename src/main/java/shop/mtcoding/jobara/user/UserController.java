@@ -1,5 +1,7 @@
 package shop.mtcoding.jobara.user;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.http.HttpStatus;
@@ -29,10 +31,12 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(UserLoginReqDto userLoginReqDto) {
+    public String login(UserLoginReqDto userLoginReqDto, String remember, HttpServletResponse response) {
         Verify.validateString(userLoginReqDto.getUsername(), "유저네임을 입력하세요.");
         Verify.validateString(userLoginReqDto.getPassword(), "암호를 입력하세요.");
         UserVo userVoPS = userService.getUser(userLoginReqDto);
+        Cookie cookie = new Cookie("remember", userVoPS.getUsername());
+        response.addCookie(cookie);
         redisService.setValue("principal", userVoPS);
         return "redirect:/";
     }

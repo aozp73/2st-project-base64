@@ -73,7 +73,7 @@
                                     <!-- Name input-->
                                     <div class="form-floating mb-3">
                                         <input class="form-control" name="username" type="text"
-                                            placeholder="Enter your name..." />
+                                            placeholder="Enter your name..." value="${remember}"/>
                                         <label for="name">Username</label>
                                         <div class="invalid-feedback" data-sb-feedback="name:required">A name is
                                             required.</div>
@@ -97,4 +97,5 @@
             <c:otherwise>
             </c:otherwise>
         </c:choose>
+
         <%@ include file="../layout/footer.jsp" %>

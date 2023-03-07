@@ -3,6 +3,8 @@ package shop.mtcoding.jobara.board;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,11 +61,19 @@ public class BoardController {
     private RedisServiceSet redisServiceSet;
 
     @GetMapping({ "/", "/home" })
-    public String home(Model model) {
+    public String home(Model model, HttpServletRequest request) {
 
+        String username = "";
+        Cookie[] cookies = request.getCookies();
+
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("remember")) {
+                username = cookie.getValue();
+            }
+        }
         List<BoardMainRespDto> boardListPS = boardService.getListToMain();
         model.addAttribute("boardMainList", boardListPS);
-        // model.addAttribute("redisService", redisService);
+        model.addAttribute("remember", username);
         redisServiceSet.addModel(model);
         return "board/home";
     }
