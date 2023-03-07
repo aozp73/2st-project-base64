@@ -28,6 +28,7 @@ import shop.mtcoding.jobara.apply.dto.ApplyReq.ApplyDecideReqDto;
 import shop.mtcoding.jobara.apply.dto.ApplyReq.ApplyReqDto;
 import shop.mtcoding.jobara.apply.dto.ApplyResp.CompanyApplyRespDto;
 import shop.mtcoding.jobara.apply.dto.ApplyResp.EmployeeApplyRespDto;
+import shop.mtcoding.jobara.common.util.RedisService;
 import shop.mtcoding.jobara.user.vo.UserVo;
 
 @Transactional
@@ -41,29 +42,21 @@ public class ApplyControllerTest {
     @Autowired
     ObjectMapper om;
 
-    private MockHttpSession employeeMockSession;
-    private MockHttpSession companyMockSession;
+    @Autowired
+    private RedisService redisService;
+
+    private MockHttpSession mockSession;
 
     @BeforeEach
-    public void employeeSetUp() {
-        UserVo pricipal = new UserVo();
-        pricipal.setId(1);
-        pricipal.setUsername("ssar");
-        pricipal.setRole("employee");
-        pricipal.setProfile(null);
-        employeeMockSession = new MockHttpSession();
-        employeeMockSession.setAttribute("principal", pricipal);
-    }
-
-    @BeforeEach
-    public void companySetUp() {
-        UserVo pricipal = new UserVo();
-        pricipal.setId(6);
-        pricipal.setUsername("ssar");
-        pricipal.setRole("company");
-        pricipal.setProfile(null);
-        companyMockSession = new MockHttpSession();
-        companyMockSession.setAttribute("principal", pricipal);
+    public void setUp() {
+        UserVo principal = new UserVo();
+        principal.setId(1);
+        principal.setUsername("ssar");
+        principal.setRole("employee");
+        principal.setProfile(null);
+        redisService.setValue("principal", principal);
+        mockSession = new MockHttpSession();
+        mockSession.setAttribute("principal", principal);
     }
 
     @Test
@@ -77,7 +70,7 @@ public class ApplyControllerTest {
                 post("/apply")
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .session(employeeMockSession));
+                        .session(mockSession));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
@@ -94,7 +87,7 @@ public class ApplyControllerTest {
 
         // when
         ResultActions resultActions = mvc.perform(
-                get("/company/" + id + "/apply").session(companyMockSession));
+                get("/company/" + id + "/apply").session(mockSession));
         Map<String, Object> map = resultActions.andReturn().getModelAndView().getModel();
         List<CompanyApplyRespDto> applyListPS = (List<CompanyApplyRespDto>) map.get("applyList");
 
@@ -110,7 +103,7 @@ public class ApplyControllerTest {
 
         // when
         ResultActions resultActions = mvc.perform(
-                get("/employee/" + id + "/apply").session(employeeMockSession));
+                get("/employee/" + id + "/apply").session(mockSession));
         Map<String, Object> map = resultActions.andReturn().getModelAndView().getModel();
         List<EmployeeApplyRespDto> applyListPS = (List<EmployeeApplyRespDto>) map.get("applyList");
 
@@ -134,7 +127,7 @@ public class ApplyControllerTest {
                 put("/board/" + boardId + "/apply")
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .session(companyMockSession));
+                        .session(mockSession));
         // String responseBody =
         // resultActions.andReturn().getResponse().getContentAsString();
         // System.out.println("테스트 : " + responseBody);
