@@ -15,6 +15,7 @@ public class ApplyResp {
     public static class CompanyApplyRespDto {
         private Integer userId;
         private Integer boardId;
+        private Integer resumeId;
         private String realName;
         private String title;
         private Integer state;
@@ -51,6 +52,7 @@ public class ApplyResp {
     public static class EmployeeApplyRespDto {
         private Integer userId;
         private Integer boardId;
+        private Integer resumeId;
         private String resumeTitle;
         private String boardTitle;
         private Integer state;

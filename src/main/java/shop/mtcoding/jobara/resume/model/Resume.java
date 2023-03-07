@@ -26,7 +26,7 @@ public class Resume {
     }
 
     public String getTitlePreview() {
-        if (content.length() < 20) {
+        if (title.length() < 20) {
             return title;
         } else {
             return title.substring(0, 20) + "...";

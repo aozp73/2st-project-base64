@@ -75,6 +75,17 @@ public class EmployeeController {
         return "employee/detail";
     }
 
+    @GetMapping("/employee/{id}/resume/{resumeId}")
+    public String employeeDetail(@PathVariable int id, @PathVariable int resumeId, Model model) {
+        UserVo principal = (UserVo) session.getAttribute("principal");
+        EmployeeAndResumeRespDto employeePS = employeeService.getEmployee(id, resumeId);
+        List<String> employeeTechPS = employeeService.getEmployeeTech(id);
+        model.addAttribute("employee", employeePS);
+        model.addAttribute("employeeTech", employeeTechPS);
+        model.addAttribute("principal", principal);
+        return "employee/detail";
+    }
+
     @GetMapping("/employee/updateForm")
     public String updateForm(Model model) {
         UserVo principal = (UserVo) session.getAttribute("principal");

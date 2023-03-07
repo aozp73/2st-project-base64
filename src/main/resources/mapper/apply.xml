@@ -36,17 +36,19 @@
     </select>
 
     <select id="findByUserIdWithBoardAndUser" resultType="shop.mtcoding.jobara.apply.dto.ApplyResp$CompanyApplyRespDto">
-        select at.id, at.user_id, at.board_id, at.state, at.created_at, et.real_name, bt.title,
+        select at.id, at.user_id, at.board_id, rt.id as resume_id, at.state, at.created_at, et.real_name, bt.title,
         from apply_tb at
         inner join employee_tb et
         on et.user_id = at.user_id
         inner join board_tb bt
         on at.board_id = bt.id
-        where bt.user_id = #{userId}
+        inner join resume_tb rt
+        on rt.user_id = et.user_id
+        where bt.user_id = #{userId} and at.resume_id = rt.id;
     </select>  
 
     <select id="findByUserIdWithBoardAndResume" resultType="shop.mtcoding.jobara.apply.dto.ApplyResp$EmployeeApplyRespDto">
-        select at.id, at.board_id, at.user_id, at.state, at.created_at, rt.title resume_title, bt.title board_title
+        select at.id, at.board_id, at.user_id, rt.id as resume_id, at.state, at.created_at, rt.title resume_title, bt.title board_title
         from apply_tb at
         inner join resume_tb rt
         on at.user_id = rt.user_id
