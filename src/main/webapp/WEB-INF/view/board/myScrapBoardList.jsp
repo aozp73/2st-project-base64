@@ -47,7 +47,16 @@
                                             </div>
                                     </a>
                                     <div class="card-footer d-flex justify-content-between">
-                                          <div>(D-${board.dday == 0 ? 'Day' : board.dday})</div>
+                                    <c:choose>
+                                        <c:when test="${board.dday < 0}">
+                                            <div style="color: crimson;">(지원 마감)</div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div>(D-${board.dday == 0 ? 'Day' : board.dday})</div>
+                                        </c:otherwise>
+                                    </c:choose>
+
+                                          <%-- <div>(D-${board.dday == 0 ? 'Day' : board.dday})</div> --%>
 
                                         <c:if test="${principal != null and principal.role eq 'employee'}">
                                             <div><i id="heart-${board.id}"
