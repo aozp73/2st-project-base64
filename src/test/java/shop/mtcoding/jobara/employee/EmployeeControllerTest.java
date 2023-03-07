@@ -4,6 +4,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.io.IOException;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -17,6 +20,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import shop.mtcoding.jobara.common.util.RedisService;
 import shop.mtcoding.jobara.employee.dto.EmployeeReq.EmployeeUpdateReqDto;
 import shop.mtcoding.jobara.user.vo.UserVo;
 
@@ -30,6 +34,9 @@ public class EmployeeControllerTest {
       @Mock
       private EmployeeUpdateReqDto employeeUpdateReqDto;
 
+      @Autowired
+      private RedisService redisService;
+
       private MockHttpSession mockSession;
 
       @BeforeEach
@@ -39,6 +46,7 @@ public class EmployeeControllerTest {
             principal.setUsername("ssar");
             principal.setRole("employee");
             principal.setProfile(null);
+            redisService.setValue("principal", principal);
             mockSession = new MockHttpSession();
             mockSession.setAttribute("principal", principal);
       }
