@@ -105,7 +105,7 @@ public class EmployeeController {
         Verify.validateString(employeeJoinReqDto.getPassword(), "암호를 입력하세요.");
         Verify.validateString(employeeJoinReqDto.getEmail(), "이메일을 입력하세요.");
         employeeService.insertEmployee(employeeJoinReqDto);
-        return "redirect:/loginForm";
+        return "redirect:/";
     }
 
     @PostMapping("/employee/update/{id}")
