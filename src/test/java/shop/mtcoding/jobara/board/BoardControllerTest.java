@@ -34,8 +34,8 @@ import shop.mtcoding.jobara.board.dto.BoardResp.BoardDetailRespDto;
 import shop.mtcoding.jobara.board.dto.BoardResp.BoardMainRespDto;
 import shop.mtcoding.jobara.board.dto.BoardResp.BoardUpdateRespDto;
 import shop.mtcoding.jobara.board.dto.BoardResp.MyBoardListRespDto;
-import shop.mtcoding.jobara.board.dto.BoardResp.MyScrapBoardListRespDto;
 import shop.mtcoding.jobara.board.dto.BoardResp.PagingDto;
+import shop.mtcoding.jobara.common.util.RedisService;
 import shop.mtcoding.jobara.user.vo.UserVo;
 
 @Transactional
@@ -51,6 +51,9 @@ public class BoardControllerTest {
     private MockHttpSession mockSession;
     private MockHttpSession mockSession2;
 
+    @Autowired
+    private RedisService redisService;
+
     @BeforeEach
     public void setUp() {
         UserVo principal = new UserVo();
@@ -60,6 +63,9 @@ public class BoardControllerTest {
         // principal.setId(1);
         // principal.setUsername("ssar");
         // principal.setRole("employee");
+        principal.setProfile(null);
+
+        redisService.setValue("principal", principal);
 
         mockSession = new MockHttpSession();
         mockSession.setAttribute("principal", principal);
@@ -305,8 +311,8 @@ public class BoardControllerTest {
 
         // then
         resultActions.andExpect(status().isOk());
-        assertThat(boardList.get(0).getTitle()).isEqualTo("공고제목1");
-        assertThat(boardList.get(1).getTitle()).isEqualTo("공고제목2");
+        assertThat(boardList.get(0).getTitle()).isEqualTo("인공지능 솔루션 (AI Solution) 개발");
+        assertThat(boardList.get(1).getTitle()).isEqualTo("인공지능 (AI Solution) 개발");
     }
 
     @Test
