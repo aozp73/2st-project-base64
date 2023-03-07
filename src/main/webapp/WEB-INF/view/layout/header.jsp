@@ -26,6 +26,8 @@
     <link rel="stylesheet" href="/css/style.css">
     <link href="/css/styles.css" rel="stylesheet" />
 </head>
+    <c:set var="principal" value="${redisService.getValue('principal')}" />
+
 
 <body>
     <body>
@@ -45,7 +47,7 @@
                             href="/employee/list">구인</a></li>
                     
                     <c:choose>
-                       <c:when test="${principal == null}">
+                       <c:when test="${principal.id == null}">
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded"
                             href="/board/list">구직</a>
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded"

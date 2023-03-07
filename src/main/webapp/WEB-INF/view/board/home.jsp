@@ -46,7 +46,7 @@
             </div>
         </section>
         <c:choose>
-            <c:when test="${principal == null}">
+            <c:when test="${principal.id == null}">
 
                 <!-- Contact Section-->
                 <section class="page-section bg-white" id="login">

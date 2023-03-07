@@ -177,7 +177,7 @@ public class BoardControllerTest {
                         .session(mockSession));
 
         HttpSession session = resultActions.andReturn().getRequest().getSession();
-        UserVo principal = (UserVo) session.getAttribute("principal");
+        UserVo principal = redisService.getValue("principal");
 
         // then
         assertThat(principal.getUsername()).isEqualTo("cos");

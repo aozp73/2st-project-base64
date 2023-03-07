@@ -14,7 +14,7 @@
                                         ${board.companyName}
                                     </div>
     <div class="ms-3">
-        <c:if test="${principal != null and principal.role eq 'employee'}" >
+        <c:if test="${principal.id != null and principal.role eq 'employee'}" >
             <i id="heart-${board.id}" class="fa-regular fa-heart my-xl my-cursor fa-sm ${love.css}" value="${love.id}" onclick="heart(`${board.id}`)"></i>
         </c:if>
     </div>

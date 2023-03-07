@@ -58,7 +58,7 @@
 
                                           <%-- <div>(D-${board.dday == 0 ? 'Day' : board.dday})</div> --%>
 
-                                        <c:if test="${principal != null and principal.role eq 'employee'}">
+                                        <c:if test="${principal.id != null and principal.role eq 'employee'}">
                                             <div><i id="heart-${board.id}"
                                                     class="fa-regular fa-heart my-xl my-cursor fa-lg ${board.css}"
                                                     value="${board.loveId}" onclick="heart(`${board.id}`)"></i></div>

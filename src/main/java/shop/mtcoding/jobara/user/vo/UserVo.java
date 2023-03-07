@@ -14,4 +14,14 @@ public class UserVo {
     private String username;
     private String profile;
     private String role;
+
+    @Override
+    public String toString() {
+        return "UserVo{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", profile='" + profile + '\'' +
+                ", role='" + role + '\'' +
+                '}';
+    }
 }
