@@ -40,7 +40,6 @@ public class UserController {
     @GetMapping("/logout")
     public String logout() {
         String sessionId = session.getId();
-        System.out.println("테스트" + sessionId);
         redisService.logout(sessionId);
         return "redirect:/";
     }

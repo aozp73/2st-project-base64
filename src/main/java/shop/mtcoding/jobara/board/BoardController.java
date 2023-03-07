@@ -116,7 +116,6 @@ public class BoardController {
         model.addAttribute("boardDetail", boardDetailPS);
         model.addAttribute("boardSkill", boardSkill);
         redisServiceSet.addModel(model);
-        System.out.println("테스트 : " + boardDetailPS.getTitle());
 
         return "board/updateForm";
     }
@@ -161,7 +160,6 @@ public class BoardController {
         // 유효성
         Verify.validateString(boardInsertReqDto.getTitle(), "제목을 입력하세요");
         Verify.validateString(boardInsertReqDto.getContent(), "내용을 입력하세요");
-        System.out.println("테스트 : " + boardInsertReqDto.getFavor().length());
         if (boardInsertReqDto.getFavor().length() > 16) {
             throw new CustomException("우대사항은 16자 이내 입력 가능합니다");
         }

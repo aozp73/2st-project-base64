@@ -21,7 +21,6 @@ public class RedisService {
         String principalJson = null;
         try {
             principalJson = om.writeValueAsString(value);
-            System.out.println(principalJson);
         } catch (Exception e) {
             System.out.println("파싱 오류");
         }
@@ -32,7 +31,6 @@ public class RedisService {
         UserVo principal = null;
         try {
             String principalJson = redisTemplate.opsForValue().get("principal");
-            System.out.println(principalJson);
             principal = om.readValue(principalJson, UserVo.class);
         } catch (Exception e) {
             System.out.println("파싱 실패");
@@ -46,7 +44,6 @@ public class RedisService {
         UserVo UserVo = new UserVo();
         try {
             String principalJson = om.writeValueAsString(UserVo);
-            setValue("principal", principalJson);
             System.out.println(principalJson);
         } catch (Exception e) {
             System.out.println("파싱 오류");

@@ -56,7 +56,6 @@ public class EmployeeController {
         UserVo principal = redisService.getValue("principal");
         PagingDto pagingPS = employeeService.getEmployee(page);
         model.addAttribute("pagingDto", pagingPS);
-        System.out.println("테스트 : " + pagingPS.getResumeListDtos().get(0).getProfile());
         if (principal != null) {
             if (principal.getRole().equals("company")) {
                 List<EmployeeAndResumeRespDto> recommendEmployeeListPS = employeeService
