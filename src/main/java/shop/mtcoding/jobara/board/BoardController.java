@@ -65,10 +65,11 @@ public class BoardController {
 
         String username = "";
         Cookie[] cookies = request.getCookies();
-
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("remember")) {
-                username = cookie.getValue();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("remember")) {
+                    username = cookie.getValue();
+                }
             }
         }
         List<BoardMainRespDto> boardListPS = boardService.getListToMain();
