@@ -44,7 +44,7 @@ public class RedisService {
         UserVo UserVo = new UserVo();
         try {
             String principalJson = om.writeValueAsString(UserVo);
-            System.out.println(principalJson);
+            setValue("principal", principalJson);
         } catch (Exception e) {
             System.out.println("파싱 오류");
         }
