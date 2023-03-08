@@ -23,8 +23,10 @@ import shop.mtcoding.jobara.common.aop.CompanyCheckApi;
 import shop.mtcoding.jobara.common.aop.EmployeeCheck;
 import shop.mtcoding.jobara.common.aop.EmployeeCheckApi;
 import shop.mtcoding.jobara.common.dto.ResponseDto;
+import shop.mtcoding.jobara.common.util.RedisService;
 import shop.mtcoding.jobara.common.util.RedisServiceSet;
 import shop.mtcoding.jobara.common.util.Verify;
+import shop.mtcoding.jobara.user.vo.UserVo;
 
 @Controller
 public class ApplyController {
@@ -33,11 +35,16 @@ public class ApplyController {
     private ApplyService applyService;
 
     @Autowired
+    private RedisService redisService;
+
+    @Autowired
     private RedisServiceSet redisServiceSet;
 
     @PostMapping("/apply")
     @EmployeeCheckApi
     public ResponseEntity<?> apply(@RequestBody ApplyReqDto applyReqDto) {
+        UserVo principal = redisService.getValue("principal");
+        applyService.insertApply(applyReqDto, principal.getId());
         return new ResponseEntity<>(new ResponseDto<>(1, "지원 성공", null), HttpStatus.OK);
     }
 
