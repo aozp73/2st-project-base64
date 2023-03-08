@@ -52,7 +52,7 @@ public class CompanyConetroller {
         Verify.validateString(companyJoinReqDto.getPassword(), "암호를 입력하세요.");
         Verify.validateString(companyJoinReqDto.getEmail(), "이메일을 입력하세요.");
         companyService.insertCompany(companyJoinReqDto);
-        return "redirect:/loginForm";
+        return "redirect:/";
     }
 
     @PostMapping("/company/update")
